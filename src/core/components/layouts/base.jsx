@@ -26,6 +26,7 @@ export default class BaseLayout extends React.Component {
     const Row = getComponent("Row")
     const Col = getComponent("Col")
     const Errors = getComponent("errors", true)
+    const SkipLinks = getComponent("SkipLinks")
 
     const ServersContainer = getComponent("ServersContainer", true)
     const SchemesContainer = getComponent("SchemesContainer", true)
@@ -96,6 +97,7 @@ export default class BaseLayout extends React.Component {
 
     return (
       <div className="swagger-ui">
+        <SkipLinks />
         <SvgAssets />
         <VersionPragmaFilter
           isSwagger2={isSwagger2}
@@ -103,14 +105,16 @@ export default class BaseLayout extends React.Component {
           alsoShow={<Errors />}
         >
           <Errors />
-          <Row className="information-container">
-            <Col mobile={12}>
-              <InfoContainer />
-            </Col>
-          </Row>
+          <header role="banner" className="information-container">
+            <Row>
+              <Col mobile={12}>
+                <InfoContainer />
+              </Col>
+            </Row>
+          </header>
 
           {hasServers || hasSchemes || hasSecurityDefinitions ? (
-            <div className="scheme-container">
+            <nav role="navigation" aria-label="API Configuration" className="scheme-container">
               <Col className="schemes wrapper" mobile={12}>
                 {hasServers || hasSchemes ? (
                   <div className="schemes-server-container">
@@ -120,30 +124,39 @@ export default class BaseLayout extends React.Component {
                 ) : null}
                 {hasSecurityDefinitions ? <AuthorizeBtnContainer /> : null}
               </Col>
-            </div>
+            </nav>
           ) : null}
 
           <FilterContainer />
 
-          <Row>
-            <Col mobile={12} desktop={12}>
-              <Operations />
-            </Col>
-          </Row>
+          <main role="main" aria-label="API Operations" id="main-content">
+            <div id="operations-tag">
+              <Row>
+                <Col mobile={12} desktop={12}>
+                  <Operations />
+                </Col>
+              </Row>
+            </div>
 
-          {isOAS31 && (
-            <Row className="webhooks-container">
-              <Col mobile={12} desktop={12}>
-                <Webhooks />
-              </Col>
-            </Row>
-          )}
+            {isOAS31 && (
+              <section role="region" aria-labelledby="webhooks-heading" className="webhooks-container">
+                <Row>
+                  <Col mobile={12} desktop={12}>
+                    <h2 id="webhooks-heading" className="sr-only">Webhooks</h2>
+                    <Webhooks />
+                  </Col>
+                </Row>
+              </section>
+            )}
 
-          <Row>
-            <Col mobile={12} desktop={12}>
-              <Models />
-            </Col>
-          </Row>
+            <aside role="complementary" aria-label="Schema Models" id="models">
+              <Row>
+                <Col mobile={12} desktop={12}>
+                  <Models />
+                </Col>
+              </Row>
+            </aside>
+          </main>
         </VersionPragmaFilter>
       </div>
     )

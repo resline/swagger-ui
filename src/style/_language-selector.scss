@@ -1,0 +1,60 @@
+.language-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  
+  &__label {
+    font-size: 12px;
+    color: #3b4151;
+    margin: 0;
+  }
+
+  &__select {
+    background: white;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    color: #3b4151;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+      border-color: #89bf04;
+      box-shadow: 0 0 0 2px rgba(137, 191, 4, 0.2);
+    }
+
+    &:hover {
+      border-color: #b8b8b8;
+    }
+  }
+}
+
+// Integration with topbar
+.topbar .language-selector {
+  margin-left: auto;
+  
+  &__label {
+    color: #ffffff;
+  }
+
+  &__select {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+
+    option {
+      background: #1f1f1f;
+      color: #ffffff;
+    }
+
+    &:focus {
+      border-color: #89bf04;
+    }
+
+    &:hover {
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+  }
+}

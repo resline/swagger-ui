@@ -13,6 +13,7 @@ const { DuplicatesPlugin } = require("inspectpack/plugin")
 const {
   WebpackBundleSizeAnalyzerPlugin,
 } = require("webpack-bundle-size-analyzer")
+const CompressionPlugin = require("compression-webpack-plugin")
 const configBuilder = require("./_config-builder")
 
 // import path from "path"
@@ -44,6 +45,26 @@ const result = configBuilder(
         verbose: false,
       }),
       new WebpackBundleSizeAnalyzerPlugin("log.bundle-sizes.swagger-ui.txt"),
+      // Gzip compression
+      new CompressionPlugin({
+        algorithm: 'gzip',
+        test: /\.(js|css|html|svg)$/,
+        threshold: 8192,
+        minRatio: 0.8,
+      }),
+      // Brotli compression
+      new CompressionPlugin({
+        filename: '[path][base].br',
+        algorithm: 'brotliCompress',
+        test: /\.(js|css|html|svg)$/,
+        compressionOptions: {
+          params: {
+            [require('zlib').constants.BROTLI_PARAM_QUALITY]: 11,
+          },
+        },
+        threshold: 8192,
+        minRatio: 0.8,
+      }),
       // new StatsWriterPlugin({
       //   filename: path.join("log.bundle-stats.swagger-ui.json"),
       //   fields: null,

@@ -1,0 +1,400 @@
+// Dark theme variables and styles
+[data-theme="dark"] {
+  // Color palette for dark mode
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2d2d2d;
+  --bg-tertiary: #3a3a3a;
+  --bg-elevated: #424242;
+  --bg-hover: #4a4a4a;
+  
+  --text-primary: #e8e8e8;
+  --text-secondary: #b8b8b8;
+  --text-tertiary: #888888;
+  --text-inverse: #1a1a1a;
+  
+  --border-color: #404040;
+  --border-light: #303030;
+  
+  // Method colors for dark mode
+  --method-get: #61affe;
+  --method-post: #49cc90;
+  --method-put: #fca130;
+  --method-delete: #f93e3e;
+  --method-patch: #50e3c2;
+  --method-options: #8989d0;
+  --method-head: #9012fe;
+  
+  // Status colors
+  --status-success: #49cc90;
+  --status-error: #f93e3e;
+  --status-warning: #fca130;
+  --status-info: #61affe;
+  
+  // Apply dark theme styles
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
+  
+  // Swagger UI specific overrides
+  .swagger-ui {
+    .wrapper {
+      background-color: var(--bg-primary);
+    }
+    
+    .topbar {
+      background-color: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      
+      .download-url-input {
+        background-color: var(--bg-tertiary);
+        color: var(--text-primary);
+        border-color: var(--border-color);
+        
+        &:focus {
+          background-color: var(--bg-elevated);
+          border-color: var(--status-info);
+        }
+      }
+      
+      .download-url-button {
+        background-color: var(--status-info);
+        color: var(--text-inverse);
+        
+        &:hover {
+          background-color: darken(#61affe, 10%);
+        }
+      }
+    }
+    
+    .info {
+      .title {
+        color: var(--text-primary);
+      }
+      
+      .description {
+        color: var(--text-secondary);
+      }
+      
+      a {
+        color: var(--status-info);
+        
+        &:hover {
+          color: lighten(#61affe, 10%);
+        }
+      }
+    }
+    
+    .scheme-container {
+      background-color: var(--bg-secondary);
+      border-color: var(--border-color);
+      
+      .schemes {
+        background-color: var(--bg-tertiary);
+        
+        > label {
+          color: var(--text-secondary);
+        }
+        
+        select {
+          background-color: var(--bg-elevated);
+          color: var(--text-primary);
+          border-color: var(--border-color);
+        }
+      }
+    }
+    
+    .opblock {
+      border-color: var(--border-color);
+      background-color: var(--bg-secondary);
+      
+      &.opblock-get {
+        .opblock-summary {
+          border-color: var(--method-get);
+          background-color: rgba(97, 175, 254, 0.1);
+        }
+        
+        .opblock-summary-method {
+          background-color: var(--method-get);
+        }
+      }
+      
+      &.opblock-post {
+        .opblock-summary {
+          border-color: var(--method-post);
+          background-color: rgba(73, 204, 144, 0.1);
+        }
+        
+        .opblock-summary-method {
+          background-color: var(--method-post);
+        }
+      }
+      
+      &.opblock-put {
+        .opblock-summary {
+          border-color: var(--method-put);
+          background-color: rgba(252, 161, 48, 0.1);
+        }
+        
+        .opblock-summary-method {
+          background-color: var(--method-put);
+        }
+      }
+      
+      &.opblock-delete {
+        .opblock-summary {
+          border-color: var(--method-delete);
+          background-color: rgba(249, 62, 62, 0.1);
+        }
+        
+        .opblock-summary-method {
+          background-color: var(--method-delete);
+        }
+      }
+      
+      .opblock-summary {
+        background-color: var(--bg-tertiary);
+        
+        &:hover {
+          background-color: var(--bg-hover);
+        }
+        
+        .opblock-summary-path {
+          color: var(--text-primary);
+        }
+        
+        .opblock-summary-description {
+          color: var(--text-secondary);
+        }
+      }
+      
+      .opblock-body {
+        background-color: var(--bg-secondary);
+        
+        .opblock-section-header {
+          background-color: var(--bg-tertiary);
+          color: var(--text-primary);
+          border-bottom-color: var(--border-color);
+        }
+        
+        .parameters-col_description {
+          color: var(--text-secondary);
+        }
+        
+        input[type="text"],
+        textarea,
+        select {
+          background-color: var(--bg-elevated);
+          color: var(--text-primary);
+          border-color: var(--border-color);
+          
+          &:focus {
+            border-color: var(--status-info);
+            background-color: var(--bg-hover);
+          }
+        }
+        
+        .btn {
+          background-color: var(--bg-elevated);
+          color: var(--text-primary);
+          border-color: var(--border-color);
+          
+          &:hover {
+            background-color: var(--bg-hover);
+          }
+          
+          &.execute {
+            background-color: var(--status-info);
+            color: var(--text-inverse);
+            border-color: var(--status-info);
+            
+            &:hover {
+              background-color: darken(#61affe, 10%);
+            }
+          }
+          
+          &.cancel {
+            background-color: var(--status-error);
+            color: var(--text-inverse);
+            border-color: var(--status-error);
+            
+            &:hover {
+              background-color: darken(#f93e3e, 10%);
+            }
+          }
+        }
+      }
+    }
+    
+    .response-col_status {
+      color: var(--text-primary);
+    }
+    
+    .response-col_description {
+      color: var(--text-secondary);
+    }
+    
+    .responses-inner {
+      background-color: var(--bg-secondary);
+      
+      h4,
+      h5 {
+        color: var(--text-primary);
+      }
+      
+      .response {
+        border-color: var(--border-color);
+        
+        .response-col_links {
+          color: var(--status-info);
+        }
+      }
+    }
+    
+    // Model/Schema section
+    .model-container {
+      background-color: var(--bg-secondary);
+      border-color: var(--border-color);
+      
+      .model-title {
+        color: var(--text-primary);
+      }
+      
+      .model {
+        color: var(--text-secondary);
+      }
+      
+      .prop-type {
+        color: var(--status-info);
+      }
+      
+      .prop-format {
+        color: var(--text-tertiary);
+      }
+    }
+    
+    // Code blocks
+    pre {
+      background-color: var(--bg-tertiary);
+      color: var(--text-primary);
+      border-color: var(--border-color);
+      
+      code {
+        background-color: transparent;
+        color: inherit;
+      }
+    }
+    
+    code {
+      background-color: var(--bg-tertiary);
+      color: var(--status-info);
+      border-color: var(--border-color);
+    }
+    
+    // Tables
+    table {
+      tbody {
+        tr {
+          background-color: var(--bg-secondary);
+          border-bottom-color: var(--border-color);
+          
+          &:hover {
+            background-color: var(--bg-hover);
+          }
+        }
+      }
+      
+      thead {
+        tr {
+          background-color: var(--bg-tertiary);
+          border-bottom-color: var(--border-color);
+          
+          th {
+            color: var(--text-primary);
+          }
+        }
+      }
+      
+      td {
+        color: var(--text-secondary);
+        border-bottom-color: var(--border-light);
+      }
+    }
+    
+    // Authorization
+    .auth-container {
+      background-color: var(--bg-secondary);
+      border-color: var(--border-color);
+      
+      .auth-item {
+        background-color: var(--bg-tertiary);
+        border-color: var(--border-color);
+        
+        h4 {
+          color: var(--text-primary);
+        }
+        
+        .auth-btn-wrapper {
+          .btn-done {
+            background-color: var(--status-success);
+            color: var(--text-inverse);
+          }
+        }
+      }
+    }
+    
+    // Errors
+    .errors-wrapper {
+      background-color: rgba(249, 62, 62, 0.1);
+      border-color: var(--status-error);
+      
+      .error-wrapper {
+        background-color: var(--bg-secondary);
+        border-color: var(--status-error);
+        
+        .message {
+          color: var(--text-primary);
+        }
+      }
+    }
+  }
+}
+
+// Theme toggle button styles
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: 4px;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: var(--bg-hover, #f0f0f0);
+  }
+  
+  .theme-toggle-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary, #333);
+    
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+// Smooth transition for theme changes
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+// Prevent transition on page load
+.no-transition * {
+  transition: none !important;
+}

@@ -31,6 +31,7 @@ import DownloadUrlPlugin from "./plugins/download-url"
 import SyntaxHighlightingPlugin from "core/plugins/syntax-highlighting"
 import VersionsPlugin from "core/plugins/versions"
 import SafeRenderPlugin from "./plugins/safe-render"
+import I18nPlugin from "./plugins/i18n"
 
 import {
   defaultOptions,
@@ -169,6 +170,7 @@ SwaggerUI.plugins = {
   SyntaxHighlighting: SyntaxHighlightingPlugin,
   Versions: VersionsPlugin,
   SafeRender: SafeRenderPlugin,
+  I18n: I18nPlugin,
 }
 
 export default SwaggerUI

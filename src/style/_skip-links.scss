@@ -1,0 +1,42 @@
+@use "variables" as *;
+
+.skip-links {
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: $white;
+    color: $bright-gray;
+    padding: 8px;
+    border-radius: 4px;
+    text-decoration: none;
+    z-index: 1000;
+    border: 2px solid $bright-gray;
+    font-weight: bold;
+    transition: top 0.2s ease-in;
+
+    &:focus {
+      top: 6px;
+      outline: 2px solid $color-info;
+      outline-offset: 2px;
+    }
+
+    &:hover {
+      background: $alabaster;
+      text-decoration: underline;
+    }
+  }
+}
+
+// Screen reader only class for hidden content that should be read
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

@@ -1,0 +1,110 @@
+// Performance optimization: Lazy loading styles
+.loading-container,
+.opblock-loading-container,
+.models-loading-container,
+.responses-loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  min-height: 100px;
+  
+  .loading-spinner,
+  .operation-spinner,
+  .models-spinner,
+  .responses-spinner {
+    margin-bottom: 1rem;
+  }
+  
+  .spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #89bf04;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  .loading-text {
+    color: #666;
+    font-size: 14px;
+    text-align: center;
+  }
+}
+
+// Specific styles for different loading contexts
+.opblock-loading-container {
+  min-height: 60px;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 4px;
+  margin: 0.5rem 0;
+  
+  .spinner {
+    width: 24px;
+    height: 24px;
+    border-width: 2px;
+  }
+  
+  .loading-text {
+    font-size: 12px;
+  }
+}
+
+.models-loading-container,
+.responses-loading-container {
+  min-height: 80px;
+  padding: 1.5rem;
+  
+  .loading-text {
+    font-style: italic;
+  }
+}
+
+// Animation keyframes
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Loading states with fade-in animation
+.swagger-ui {
+  .loading-container,
+  .opblock-loading-container,
+  .models-loading-container,
+  .responses-loading-container {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Optimize lazy loaded content appearance
+.swagger-ui .opblock {
+  transition: all 0.2s ease-in-out;
+  
+  &.lazy-loaded {
+    animation: slideIn 0.3s ease-out;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

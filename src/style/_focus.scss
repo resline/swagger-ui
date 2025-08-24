@@ -1,0 +1,79 @@
+@use "variables" as *;
+
+// Focus styles with high contrast
+:focus {
+  outline: 2px solid $color-info;
+  outline-offset: 2px;
+}
+
+// Focus visible for better keyboard navigation
+:focus-visible {
+  outline: 3px solid $color-info;
+  outline-offset: 2px;
+}
+
+// Skip links focus
+.skip-link:focus,
+.skip-link:focus-visible {
+  outline: 3px solid $color-info;
+  outline-offset: 2px;
+}
+
+// Button focus styles
+.btn:focus,
+.btn:focus-visible {
+  outline: 3px solid $color-info;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 1px $white, 0 0 0 4px $color-info;
+}
+
+// Interactive heading focus
+h1[role="button"]:focus,
+h2[role="button"]:focus,
+h3[role="button"]:focus,
+h1[role="button"]:focus-visible,
+h2[role="button"]:focus-visible,
+h3[role="button"]:focus-visible {
+  outline: 3px solid $color-info;
+  outline-offset: 2px;
+  background-color: rgba($color-info, 0.1);
+}
+
+// Form controls focus
+input:focus,
+input:focus-visible,
+select:focus,
+select:focus-visible,
+textarea:focus,
+textarea:focus-visible {
+  outline: 3px solid $color-info;
+  outline-offset: 2px;
+  border-color: $color-info;
+  box-shadow: 0 0 0 1px $color-info;
+}
+
+// Operation expand buttons
+.expand-operation:focus,
+.expand-operation:focus-visible,
+.expand-methods:focus,
+.expand-methods:focus-visible {
+  outline: 3px solid $color-info;
+  outline-offset: 2px;
+  background-color: rgba($color-info, 0.1);
+}
+
+// Links focus
+a:focus,
+a:focus-visible {
+  outline: 3px solid $color-info;
+  outline-offset: 2px;
+  text-decoration: underline;
+}
+
+// Remove focus outline for mouse users
+@media (pointer: fine) {
+  :focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: none;
+  }
+}

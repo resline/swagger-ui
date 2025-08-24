@@ -1,0 +1,60 @@
+// Theme toggle button styles for TopBar integration
+.swagger-ui {
+  .topbar {
+    .topbar-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      
+      .topbar-theme-toggle {
+        margin-left: auto;
+        margin-right: 1rem;
+      }
+    }
+  }
+  
+  .theme-toggle {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .theme-toggle-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+  
+  // Dark theme override for toggle button
+  [data-theme="dark"] & {
+    .theme-toggle {
+      border-color: var(--border-color);
+      
+      &:hover {
+        background-color: var(--bg-hover);
+        border-color: var(--status-info);
+      }
+      
+      .theme-toggle-icon {
+        color: var(--text-primary);
+      }
+    }
+  }
+}

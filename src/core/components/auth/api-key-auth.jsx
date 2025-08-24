@@ -1,5 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
+import { validateApiKey, sanitizeString } from "core/utils/validation"
 
 export default class ApiKeyAuth extends React.Component {
   static propTypes = {
@@ -20,7 +21,9 @@ export default class ApiKeyAuth extends React.Component {
     this.state = {
       name: name,
       schema: schema,
-      value: value
+      value: value,
+      validationErrors: [],
+      isValidating: false
     }
   }
 
@@ -32,11 +35,36 @@ export default class ApiKeyAuth extends React.Component {
 
   onChange =(e) => {
     let { onChange } = this.props
-    let value = e.target.value
-    let newState = Object.assign({}, this.state, { value: value })
+    let rawValue = e.target.value
+    
+    // Sanitize the input first
+    let sanitizedValue = sanitizeString(rawValue, { 
+      trim: false, // Don't trim while typing
+      maxLength: 128,
+      removeScripts: true 
+    })
+    
+    // Validate the sanitized value
+    this.setState({ isValidating: true })
+    
+    const validationResult = validateApiKey(sanitizedValue)
+    const validationErrors = validationResult.isValid ? [] : validationResult.errors
+    
+    let newState = Object.assign({}, this.state, { 
+      value: sanitizedValue,
+      validationErrors: validationErrors,
+      isValidating: false 
+    })
 
     this.setState(newState)
-    onChange(newState)
+    
+    // Only pass valid values to parent
+    if (validationResult.isValid) {
+      onChange({
+        ...newState,
+        value: validationResult.sanitized
+      })
+    }
   }
 
   render() {
@@ -50,6 +78,10 @@ export default class ApiKeyAuth extends React.Component {
     const path = authSelectors.selectAuthPath(name)
     let value = this.getValue()
     let errors = errSelectors.allErrors().filter( err => err.get("authId") === name)
+    
+    // Combine validation errors with existing errors
+    const { validationErrors, isValidating } = this.state
+    const hasValidationErrors = validationErrors.length > 0
 
     return (
       <div>
@@ -77,6 +109,10 @@ export default class ApiKeyAuth extends React.Component {
                         type="text" 
                         onChange={ this.onChange } 
                         autoFocus
+                        style={{ 
+                          borderColor: hasValidationErrors ? '#f5222d' : undefined,
+                          backgroundColor: isValidating ? '#f0f0f0' : undefined 
+                        }}
                       />
                     </Col>
           }
@@ -85,6 +121,13 @@ export default class ApiKeyAuth extends React.Component {
           errors.valueSeq().map( (error, key) => {
             return <AuthError error={ error }
                               key={ key }/>
+          } )
+        }
+        {
+          validationErrors.map( (errorMsg, idx) => {
+            return <div key={`validation-${idx}`} style={{ color: '#f5222d', fontSize: '12px', marginTop: '4px' }}>
+                     <strong>Validation Error:</strong> {errorMsg}
+                   </div>
           } )
         }
       </div>

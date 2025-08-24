@@ -27,3 +27,22 @@ dist/log*
 # Cypress
 test/e2e-cypress/screenshots
 test/e2e-cypress/videos
+
+# Security-specific ignores
+.env
+secrets/
+secrets-backup/
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+reports/
+*.sarif
+trivy-*
+security-report-*
+logs/
+grafana-data/
+prometheus-data/
+elasticsearch-data/
+docker-compose.override.yml

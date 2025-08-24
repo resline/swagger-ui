@@ -2,6 +2,7 @@ import React, { cloneElement } from "react"
 import PropTypes from "prop-types"
 
 import {parseSearch, serializeSearch} from "core/utils"
+import ThemeToggle from "../../../../core/components/theme-toggle"
 
 class TopBar extends React.Component {
 
@@ -132,8 +133,15 @@ class TopBar extends React.Component {
       })
 
       control.push(
-        <label className="select-label" htmlFor="select"><span>Select a definition</span>
-          <select id="select" disabled={isLoading} onChange={ this.onUrlSelect } value={urls[this.state.selectedIndex].url}>
+        <label className="select-label" htmlFor="select">
+          <span>Select a definition</span>
+          <select 
+            id="select" 
+            disabled={isLoading} 
+            onChange={ this.onUrlSelect } 
+            value={urls[this.state.selectedIndex].url}
+            aria-label="Select API definition"
+            required>
             {rows}
           </select>
         </label>
@@ -142,6 +150,11 @@ class TopBar extends React.Component {
     else {
       formOnSubmit = this.downloadUrl
       control.push(
+        <label htmlFor="download-url-input" className="sr-only">
+          Enter OpenAPI specification URL
+        </label>
+      )
+      control.push(
         <input
           className={classNames.join(" ")}
           type="text"
@@ -149,24 +162,28 @@ class TopBar extends React.Component {
           value={this.state.url}
           disabled={isLoading}
           id="download-url-input"
+          placeholder="Enter OpenAPI specification URL"
+          aria-label="Enter OpenAPI specification URL"
+          required
         />
       )
-      control.push(<Button className="download-url-button" onClick={ this.downloadUrl }>Explore</Button>)
+      control.push(<Button className="download-url-button" onClick={ this.downloadUrl } aria-label="Load and explore API specification">Explore</Button>)
     }
 
     return (
-      <div className="topbar">
+      <header role="banner" className="topbar">
         <div className="wrapper">
           <div className="topbar-wrapper">
-            <Link>
+            <Link aria-label="Swagger UI Home">
               <Logo/>
             </Link>
-            <form className="download-url-wrapper" onSubmit={formOnSubmit}>
+            <form className="download-url-wrapper" onSubmit={formOnSubmit} aria-label="API specification input">
               {control.map((el, i) => cloneElement(el, { key: i }))}
             </form>
+            <ThemeToggle className="topbar-theme-toggle" />
           </div>
         </div>
-      </div>
+      </header>
     )
   }
 }

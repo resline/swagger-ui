@@ -142,17 +142,37 @@ export default class Parameters extends Component {
       <div className="opblock-section">
         <div className="opblock-section-header">
           {isOAS3 ? (
-            <div className="tab-header">
-              <div onClick={() => this.toggleTab("parameters")}
-                   className={`tab-item ${this.state.parametersVisible && "active"}`}>
+            <div className="tab-header" role="tablist" aria-label="Request sections">
+              <button
+                role="tab"
+                aria-selected={this.state.parametersVisible}
+                tabIndex={this.state.parametersVisible ? 0 : -1}
+                onClick={() => this.toggleTab("parameters")}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    this.toggleTab("parameters")
+                  }
+                }}
+                className={`tab-item ${this.state.parametersVisible && "active"}`}>
                 <h4 className="opblock-title"><span>Parameters</span></h4>
-              </div>
+              </button>
               {operation.get("callbacks") ?
                 (
-                  <div onClick={() => this.toggleTab("callbacks")}
-                       className={`tab-item ${this.state.callbackVisible && "active"}`}>
+                  <button
+                    role="tab"
+                    aria-selected={this.state.callbackVisible}
+                    tabIndex={this.state.callbackVisible ? 0 : -1}
+                    onClick={() => this.toggleTab("callbacks")}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        this.toggleTab("callbacks")
+                      }
+                    }}
+                    className={`tab-item ${this.state.callbackVisible && "active"}`}>
                     <h4 className="opblock-title"><span>Callbacks</span></h4>
-                  </div>
+                  </button>
                 ) : null
               }
             </div>
@@ -171,7 +191,7 @@ export default class Parameters extends Component {
               onResetClick={() => onResetClick(pathMethod)}/>
           ) : null}
         </div>
-        {this.state.parametersVisible ? <div className="parameters-container">
+        {this.state.parametersVisible ? <div className="parameters-container" role="tabpanel" aria-labelledby="parameters-tab">
           {!groupedParametersArr.length ? <div className="opblock-description-wrapper"><p>No parameters</p></div> :
             <div className="table-container">
               <table className="parameters">
@@ -208,7 +228,7 @@ export default class Parameters extends Component {
           }
         </div> : null}
 
-        {this.state.callbackVisible ? <div className="callbacks-container opblock-description-wrapper">
+        {this.state.callbackVisible ? <div className="callbacks-container opblock-description-wrapper" role="tabpanel" aria-labelledby="callbacks-tab">
           <Callbacks
             callbacks={Map(operation.get("callbacks"))}
             specPath={specPath.slice(0, -1).push("callbacks")}

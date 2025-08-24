@@ -23,6 +23,10 @@ import shaJs from "sha.js"
 import win from "core/window"
 import getParameterSchema from "core/utils/get-parameter-schema"
 
+// Performance monitoring utilities
+export { default as getPerformanceMonitor, PerformanceMonitor } from "./performance-monitor.js"
+export { default as getWebVitalsTracker, WebVitalsTracker, trackLCP, trackFID, trackCLS, trackTTFB, trackFCP } from "./web-vitals.js"
+export * from "./performance-hooks.js"
 
 const DEFAULT_RESPONSE_KEY = "default"
 

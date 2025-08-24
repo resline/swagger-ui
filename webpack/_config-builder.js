@@ -149,12 +149,54 @@ function buildConfig(
                   !customConfig.mode || customConfig.mode === "production",
                 keep_fnames:
                   !customConfig.mode || customConfig.mode === "production",
+                compress: {
+                  drop_console: 
+                    !customConfig.mode || customConfig.mode === "production",
+                  drop_debugger:
+                    !customConfig.mode || customConfig.mode === "production",
+                  pure_funcs: 
+                    !customConfig.mode || customConfig.mode === "production" 
+                      ? ['console.log', 'console.info', 'console.debug', 'console.warn'] 
+                      : []
+                },
                 output: {
                   comments: false,
                 },
               },
             }).apply(compiler),
         ],
+        usedExports: true,
+        sideEffects: false,
+        splitChunks: {
+          chunks: 'all',
+          cacheGroups: {
+            vendor: {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'vendors',
+              chunks: 'all',
+              priority: 10,
+            },
+            react: {
+              test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+              name: 'react-vendor',
+              chunks: 'all',
+              priority: 20,
+            },
+            lodash: {
+              test: /[\\/]node_modules[\\/]lodash[\\/]/,
+              name: 'lodash-vendor',
+              chunks: 'all',
+              priority: 15,
+            },
+            common: {
+              minChunks: 2,
+              name: 'common',
+              chunks: 'all',
+              enforce: true,
+              priority: 5,
+            },
+          },
+        },
       },
     },
     customConfig

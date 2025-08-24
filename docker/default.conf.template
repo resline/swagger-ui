@@ -1,3 +1,24 @@
+  # Custom log formats for better monitoring
+  log_format main_ext '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for" '
+                      'rt=$request_time uct="$upstream_connect_time" '
+                      'uht="$upstream_header_time" urt="$upstream_response_time"';
+
+  log_format json_combined escape=json
+    '{'
+      '"timestamp":"$time_iso8601",'
+      '"remote_addr":"$remote_addr",'
+      '"method":"$request_method",'
+      '"uri":"$request_uri",'
+      '"status":"$status",'
+      '"body_bytes_sent":"$body_bytes_sent",'
+      '"request_time":"$request_time",'
+      '"http_referrer":"$http_referer",'
+      '"http_user_agent":"$http_user_agent",'
+      '"http_x_forwarded_for":"$http_x_forwarded_for"'
+    '}';
+
   types {
     text/plain yaml;
     text/plain yml;
@@ -15,26 +36,53 @@
   }
   server_tokens off; # Hide Nginx version
 
+  # Rate limiting zones
+  limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
+  limit_req_zone $binary_remote_addr zone=auth:10m rate=5r/s;
+  limit_req_zone $binary_remote_addr zone=general:10m rate=30r/s;
+
   server {
     listen            $PORT;
     server_name       localhost;
     index             index.html index.htm;
 
+    # Security headers
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https: wss:; frame-src 'none'; object-src 'none'; base-uri 'self';" always;
+
     location $BASE_URL {
       absolute_redirect off;
       alias            /usr/share/nginx/html/;
       expires 1d;
+      
+      # General rate limiting
+      limit_req zone=general burst=50 nodelay;
 
       location ~ swagger-initializer.js {
         expires -1;
         include templates/cors.conf;
+        # More restrictive rate limiting for initializer
+        limit_req zone=api burst=10 nodelay;
       }
 
       location ~* \.(?:json|yml|yaml)$ {
         #SWAGGER_ROOT
         expires -1;
+        # API spec files rate limiting
+        limit_req zone=api burst=20 nodelay;
 
         include templates/cors.conf;
+      }
+
+      # OAuth and auth endpoints rate limiting
+      location ~* ^.*/oauth.*$ {
+        limit_req zone=auth burst=5 nodelay;
+        include templates/cors.conf;
+        include templates/embedding.conf;
       }
 
       include templates/cors.conf;

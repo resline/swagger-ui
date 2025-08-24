@@ -39,7 +39,8 @@ const browser = {
           core: "./src/core",
         }
       }
-    ]
+    ],
+    "babel-plugin-lodash"
   ],
 }
 
@@ -87,7 +88,8 @@ module.exports = {
               core: "./src/core",
             }
           }
-        ]
+        ],
+        "babel-plugin-lodash"
       ],
     },
     esm: {
@@ -130,7 +132,8 @@ module.exports = {
               core: "./src/core",
             }
           }
-        ]
+        ],
+        "babel-plugin-lodash"
       ]
     },
     development: browser,

@@ -28,12 +28,27 @@ export default class TryItOutButton extends React.Component {
     return (
       <div className={showReset ? "try-out btn-group" : "try-out"}>
         {
-          enabled ? <button className="btn try-out__btn cancel" onClick={ onCancelClick }>Cancel</button>
-                  : <button className="btn try-out__btn" onClick={ onTryoutClick }>Try it out </button>
+          enabled ? <button 
+                      className="btn try-out__btn cancel" 
+                      onClick={ onCancelClick }
+                      aria-label="Cancel trying out this operation">
+                      Cancel
+                    </button>
+                  : <button 
+                      className="btn try-out__btn" 
+                      onClick={ onTryoutClick }
+                      aria-label="Try out this operation">
+                      Try it out
+                    </button>
 
         }
         {
-          showReset && <button className="btn try-out__btn reset" onClick={ onResetClick }>Reset</button>
+          showReset && <button 
+                        className="btn try-out__btn reset" 
+                        onClick={ onResetClick }
+                        aria-label="Reset form to original values">
+                        Reset
+                      </button>
         }
       </div>
     )

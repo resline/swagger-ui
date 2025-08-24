@@ -1,6 +1,7 @@
 import parseUrl from "url-parse"
 import win from "core/window"
 import { btoa, buildFormData } from "core/utils"
+import { authStorage } from "core/utils/secure-storage"
 
 export const SHOW_AUTH_POPUP = "show_popup"
 export const AUTHORIZE = "authorize"
@@ -276,7 +277,12 @@ export const persistAuthorizationIfNeeded = () => ( { authSelectors, getConfigs 
 
   // persist authorization to local storage
   const authorized = authSelectors.authorized().toJS()
-  localStorage.setItem("authorized", JSON.stringify(authorized))
+  try {
+    authStorage.setAuth(authorized)
+  } catch (e) {
+    console.warn("Failed to use secure storage, falling back to localStorage:", e)
+    localStorage.setItem("authorized", JSON.stringify(authorized))
+  }
 }
 
 export const authPopup = (url, swaggerUIRedirectOauth2) => ( ) => {

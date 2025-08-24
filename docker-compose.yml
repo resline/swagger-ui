@@ -1,0 +1,198 @@
+version: '3.8'
+
+services:
+  swagger-ui:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    image: swagger-ui:latest
+    container_name: swagger-ui
+    restart: unless-stopped
+    ports:
+      - "${SWAGGER_UI_PORT:-8080}:8080"
+    environment:
+      - API_KEY=${API_KEY:-}
+      - SWAGGER_JSON=${SWAGGER_JSON:-/app/swagger.json}
+      - BASE_URL=${BASE_URL:-/}
+      - SWAGGER_JSON_URL=${SWAGGER_JSON_URL:-}
+      - CORS=${CORS:-true}
+      - EMBEDDING=${EMBEDDING:-false}
+    volumes:
+      - ./logs:/var/log/nginx:rw
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080${BASE_URL:-/}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - swagger-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.swagger-ui.rule=Host(`${SWAGGER_DOMAIN:-localhost}`)"
+      - "traefik.http.services.swagger-ui.loadbalancer.server.port=8080"
+      - "com.docker.compose.service=swagger-ui"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,size=100m
+      - /var/run:noexec,nosuid,size=100m
+      - /var/cache/nginx:noexec,nosuid,size=100m
+
+  # Prometheus for metrics collection
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    container_name: swagger-prometheus
+    restart: unless-stopped
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+      - '--web.external-url=http://localhost:9090/'
+    networks:
+      - swagger-network
+    labels:
+      - "com.docker.compose.service=monitoring"
+    user: "65534:65534"
+    security_opt:
+      - no-new-privileges:true
+
+  # Grafana for visualization
+  grafana:
+    image: grafana/grafana:10.0.3
+    container_name: swagger-grafana
+    restart: unless-stopped
+    ports:
+      - "${GRAFANA_PORT:-3000}:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin123}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SECURITY_DISABLE_GRAVATAR=true
+      - GF_SECURITY_COOKIE_SECURE=true
+      - GF_SECURITY_COOKIE_SAMESITE=strict
+      - GF_ANALYTICS_REPORTING_ENABLED=false
+      - GF_ANALYTICS_CHECK_FOR_UPDATES=false
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    networks:
+      - swagger-network
+    labels:
+      - "com.docker.compose.service=monitoring"
+    user: "472:472"
+    security_opt:
+      - no-new-privileges:true
+
+  # Nginx Exporter for metrics
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:0.11.0
+    container_name: swagger-nginx-exporter
+    restart: unless-stopped
+    ports:
+      - "${NGINX_EXPORTER_PORT:-9113}:9113"
+    command:
+      - '-nginx.scrape-uri=http://swagger-ui:8080/stub_status'
+    networks:
+      - swagger-network
+    depends_on:
+      - swagger-ui
+    labels:
+      - "com.docker.compose.service=monitoring"
+    user: "65534:65534"
+    security_opt:
+      - no-new-privileges:true
+
+  # Elasticsearch for centralized logging
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.2
+    container_name: swagger-elasticsearch
+    restart: unless-stopped
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - "${ELASTICSEARCH_PORT:-9200}:9200"
+    networks:
+      - swagger-network
+    labels:
+      - "com.docker.compose.service=logging"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Kibana for log visualization
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.8.2
+    container_name: swagger-kibana
+    restart: unless-stopped
+    ports:
+      - "${KIBANA_PORT:-5601}:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    networks:
+      - swagger-network
+    depends_on:
+      - elasticsearch
+    labels:
+      - "com.docker.compose.service=logging"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5601/api/status || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Filebeat for log shipping
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.8.2
+    container_name: swagger-filebeat
+    restart: unless-stopped
+    user: root
+    volumes:
+      - ./monitoring/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./logs:/var/log/nginx:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - swagger-network
+    depends_on:
+      - elasticsearch
+    labels:
+      - "com.docker.compose.service=logging"
+
+volumes:
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
+  elasticsearch-data:
+    driver: local
+
+networks:
+  swagger-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/16

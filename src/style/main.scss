@@ -18,8 +18,18 @@
   @include meta.load-css("information");
   @include meta.load-css("authorize");
   @include meta.load-css("errors");
+  @include meta.load-css("skip-links");
+  @include meta.load-css("focus");
+  @include meta.load-css("lazy-loading");
+  @include meta.load-css("dark-theme");
+  @include meta.load-css("theme-toggle");
+  @include meta.load-css("language-selector");
+  @include meta.load-css("topbar-i18n");
   @include meta.load-css("split-pane-mode");
+  @include meta.load-css("skip-links");
+  @include meta.load-css("focus");
   @include meta.load-css("markdown");
+  @include meta.load-css("lazy-loading");
   @include meta.load-css("../core/plugins/json-schema-2020-12/components/all");
   @include meta.load-css("../core/plugins/oas31/components/all");
 }

@@ -1,0 +1,38 @@
+// Integration with topbar for i18n language selector
+.topbar-container {
+  position: relative;
+}
+
+.topbar-language-selector {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  z-index: 10;
+  
+  .language-selector {
+    margin-left: auto;
+    
+    &__label {
+      color: #ffffff;
+    }
+
+    &__select {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+
+      option {
+        background: #1f1f1f;
+        color: #ffffff;
+      }
+
+      &:focus {
+        border-color: #89bf04;
+      }
+
+      &:hover {
+        border-color: rgba(255, 255, 255, 0.5);
+      }
+    }
+  }
+}

@@ -4,15 +4,15 @@
 $black: #000 !default;
 $white: #fff !default;
 $gray-50: color.adjust($black, $lightness: 92%) !default; //ebebeb
-$gray-200: color.adjust($black, $lightness: 62.75%) !default; // #a0a0a0
-$gray-300: color.adjust($black, $lightness: 56.5%) !default; // #909090
-$gray-400: color.adjust($black, $lightness: 50%) !default; // #808080
-$gray-500: color.adjust($black, $lightness: 43.75%) !default; // #707070
-$gray-600: color.adjust($black, $lightness: 37.5%) !default; // #606060
-$gray-650: color.adjust($black, $lightness: 33.3%) !default; // #555555
-$gray-700: color.adjust($black, $lightness: 31.25%) !default; // #505050
-$gray-800: color.adjust($black, $lightness: 25%) !default; // #404040
-$gray-900: color.adjust($black, $lightness: 18.75%) !default; // #303030
+$gray-200: color.adjust($black, $lightness: 60%) !default; // Darker for better contrast
+$gray-300: color.adjust($black, $lightness: 45%) !default; // Darker for better contrast
+$gray-400: color.adjust($black, $lightness: 40%) !default; // Darker for better contrast
+$gray-500: color.adjust($black, $lightness: 35%) !default; // Darker for better contrast
+$gray-600: color.adjust($black, $lightness: 30%) !default; // Darker for better contrast
+$gray-650: color.adjust($black, $lightness: 25%) !default; // Darker for better contrast
+$gray-700: color.adjust($black, $lightness: 20%) !default; // Darker for better contrast
+$gray-800: color.adjust($black, $lightness: 15%) !default; // Darker for better contrast
+$gray-900: color.adjust($black, $lightness: 10%) !default; // Darker for better contrast
 
 $cod-gray: #1b1b1b !default;
 $agate-gray: #333333 !default;
@@ -39,8 +39,8 @@ $mango-tango: #e97500 !default;
 
 $color-primary: #89bf04 !default;
 $color-secondary: #9012fe !default;
-$color-info: #4990e2 !default;
-$color-warning: #ff6060 !default;
+$color-info: #0066cc !default; // Darker blue for better contrast
+$color-warning: #cc0000 !default; // Darker red for better contrast
 $color-danger: #f00 !default;
 
 $color-primary-hover: color.adjust($color-primary, $lightness: 0.5%) !default;

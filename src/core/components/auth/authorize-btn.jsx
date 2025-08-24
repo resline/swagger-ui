@@ -19,9 +19,13 @@ export default class AuthorizeBtn extends React.Component {
 
     return (
       <div className="auth-wrapper">
-        <button className={isAuthorized ? "btn authorize locked" : "btn authorize unlocked"} onClick={onClick}>
+        <button 
+          className={isAuthorized ? "btn authorize locked" : "btn authorize unlocked"} 
+          onClick={onClick}
+          aria-label={isAuthorized ? "Authorized - click to manage authorization" : "Not authorized - click to authorize"}
+          aria-expanded={showPopup}>
           <span>Authorize</span>
-          {isAuthorized ? <LockAuthIcon /> : <UnlockAuthIcon />}
+          {isAuthorized ? <LockAuthIcon aria-hidden="true" /> : <UnlockAuthIcon aria-hidden="true" />}
         </button>
       { showPopup && <AuthorizationPopup /> }
       </div>
