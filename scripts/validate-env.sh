@@ -114,26 +114,118 @@ validate_url() {
     fi
 }
 
+# Function to validate password strength
+validate_password_strength() {
+    local var_name=$1
+    local password=${!var_name:-}
+    
+    if [ -z "$password" ]; then
+        echo -e "${YELLOW}⚠️  WARNING: $var_name is not set${NC}"
+        return 1
+    fi
+    
+    # Check for placeholder values
+    if [[ "$password" =~ ^CHANGE_ME.*REQUIRED$ ]] || [[ "$password" =~ ^CHANGE_ME.*IF_USED$ ]]; then
+        echo -e "${RED}❌ SECURITY ERROR: $var_name uses placeholder value - must be changed!${NC}"
+        return 1
+    fi
+    
+    # Check minimum length (16 characters)
+    if [ ${#password} -lt 16 ]; then
+        echo -e "${RED}❌ SECURITY ERROR: $var_name is too short (minimum 16 characters)${NC}"
+        return 1
+    fi
+    
+    # Check for complexity requirements
+    local has_lower=false
+    local has_upper=false
+    local has_digit=false
+    local has_special=false
+    
+    if [[ "$password" =~ [a-z] ]]; then has_lower=true; fi
+    if [[ "$password" =~ [A-Z] ]]; then has_upper=true; fi
+    if [[ "$password" =~ [0-9] ]]; then has_digit=true; fi
+    if [[ "$password" =~ [^a-zA-Z0-9] ]]; then has_special=true; fi
+    
+    local missing_requirements=()
+    
+    if [ "$has_lower" = false ]; then missing_requirements+=("lowercase letter"); fi
+    if [ "$has_upper" = false ]; then missing_requirements+=("uppercase letter"); fi
+    if [ "$has_digit" = false ]; then missing_requirements+=("number"); fi
+    if [ "$has_special" = false ]; then missing_requirements+=("special character"); fi
+    
+    if [ ${#missing_requirements[@]} -gt 0 ]; then
+        echo -e "${RED}❌ SECURITY ERROR: $var_name missing: ${missing_requirements[*]}${NC}"
+        return 1
+    fi
+    
+    # Check for common weak passwords
+    local common_patterns=("password" "admin" "123" "qwerty" "letmein" "welcome")
+    local password_lower=$(echo "$password" | tr '[:upper:]' '[:lower:]')
+    
+    for pattern in "${common_patterns[@]}"; do
+        if [[ "$password_lower" =~ $pattern ]]; then
+            echo -e "${RED}❌ SECURITY ERROR: $var_name contains common pattern '$pattern'${NC}"
+            return 1
+        fi
+    done
+    
+    # Check for repeated characters (more than 3 in a row)
+    if [[ "$password" =~ (.)\1{3,} ]]; then
+        echo -e "${RED}❌ SECURITY ERROR: $var_name has too many repeated characters${NC}"
+        return 1
+    fi
+    
+    echo -e "${GREEN}✅ $var_name: Strong password (${#password} characters)${NC}"
+    return 0
+}
+
 # Function to check security configuration
 check_security_config() {
     echo -e "\n${BLUE}🔒 Security Configuration${NC}"
     echo "=========================="
     
-    # Check if default passwords are being used
-    if [ "${GRAFANA_PASSWORD:-}" = "admin123" ]; then
-        echo -e "${RED}❌ SECURITY WARNING: Using default Grafana password!${NC}"
-        echo -e "${YELLOW}   Please change GRAFANA_PASSWORD in your .env file${NC}"
+    local security_errors=0
+    
+    # Check for default/weak passwords
+    validate_password_strength "GRAFANA_PASSWORD" || security_errors=$((security_errors + 1))
+    
+    # Check API key if set
+    if [ -n "${API_KEY:-}" ]; then
+        if [[ "${API_KEY}" =~ ^CHANGE_ME.*REQUIRED$ ]]; then
+            echo -e "${RED}❌ SECURITY ERROR: API_KEY uses placeholder value - must be changed!${NC}"
+            security_errors=$((security_errors + 1))
+        elif [ ${#API_KEY} -lt 32 ]; then
+            echo -e "${RED}❌ SECURITY ERROR: API_KEY too short (minimum 32 characters)${NC}"
+            security_errors=$((security_errors + 1))
+        else
+            echo -e "${GREEN}✅ API_KEY: Sufficient length (${#API_KEY} characters)${NC}"
+        fi
+    fi
+    
+    # Check database password if set
+    if [ -n "${DB_PASSWORD:-}" ] && [ "${DB_PASSWORD}" != "CHANGE_ME_SECURE_DB_PASSWORD_IF_USED" ]; then
+        validate_password_strength "DB_PASSWORD" || security_errors=$((security_errors + 1))
     fi
     
     # Check if running in production with debug enabled
     if [ "${NODE_ENV:-}" = "production" ] && [ "${DEBUG:-}" = "true" ]; then
-        echo -e "${RED}❌ SECURITY WARNING: Debug mode enabled in production!${NC}"
+        echo -e "${RED}❌ SECURITY ERROR: Debug mode enabled in production!${NC}"
+        security_errors=$((security_errors + 1))
     fi
     
     # Check SSL configuration for production
     if [ "${NODE_ENV:-}" = "production" ] && [ "${FORCE_HTTPS:-}" != "true" ]; then
         echo -e "${YELLOW}⚠️  SECURITY WARNING: HTTPS not enforced in production${NC}"
     fi
+    
+    # Check for development mode in production
+    if [ "${NODE_ENV:-}" = "production" ] && [ "${DEVELOPMENT_MODE:-}" = "true" ]; then
+        echo -e "${RED}❌ SECURITY ERROR: Development mode enabled in production!${NC}"
+        security_errors=$((security_errors + 1))
+    fi
+    
+    return $security_errors
 }
 
 # Main validation
@@ -177,7 +269,7 @@ main() {
     validate_boolean "NO_NEW_PRIVILEGES" || exit_code=1
     
     # Additional security checks
-    check_security_config
+    check_security_config || exit_code=$((exit_code + $?))
     
     # Summary
     echo -e "\n${BLUE}📋 Validation Summary${NC}"
@@ -187,8 +279,9 @@ main() {
         echo -e "${GREEN}✅ Environment validation completed successfully!${NC}"
         echo -e "${GREEN}🚀 Ready to deploy Swagger UI${NC}"
     else
-        echo -e "${RED}❌ Environment validation failed!${NC}"
-        echo -e "${RED}🛠️  Please fix the errors above before deploying${NC}"
+        echo -e "${RED}❌ Environment validation failed with $exit_code errors!${NC}"
+        echo -e "${RED}🛠️  Please fix the security errors above before deploying${NC}"
+        echo -e "${YELLOW}💡 Use './scripts/manage-secrets.sh generate-password' to create secure passwords${NC}"
         exit $exit_code
     fi
 }
