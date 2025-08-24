@@ -5,6 +5,12 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 // Import translation resources
 import enTranslations from './locales/en.json';
 import esTranslations from './locales/es.json';
+import arTranslations from './locales/ar.json';
+import frTranslations from './locales/fr.json';
+import deTranslations from './locales/de.json';
+import zhCNTranslations from './locales/zh-CN.json';
+import jaTranslations from './locales/ja.json';
+import ptTranslations from './locales/pt.json';
 
 const resources = {
   en: {
@@ -13,6 +19,40 @@ const resources = {
   es: {
     translation: esTranslations,
   },
+  ar: {
+    translation: arTranslations,
+  },
+  fr: {
+    translation: frTranslations,
+  },
+  de: {
+    translation: deTranslations,
+  },
+  'zh-CN': {
+    translation: zhCNTranslations,
+  },
+  ja: {
+    translation: jaTranslations,
+  },
+  pt: {
+    translation: ptTranslations,
+  },
+};
+
+// RTL languages list
+const RTL_LANGUAGES = ['ar', 'he', 'fa', 'ur'];
+
+// Helper function to check if language is RTL
+const isRTL = (language) => {
+  const langCode = language.split('-')[0]; // Handle language codes like 'ar-SA'
+  return RTL_LANGUAGES.includes(langCode);
+};
+
+// Helper function to set document direction
+const setDocumentDirection = (language) => {
+  const direction = isRTL(language) ? 'rtl' : 'ltr';
+  document.documentElement.setAttribute('dir', direction);
+  document.documentElement.setAttribute('lang', language);
 };
 
 i18n
@@ -44,4 +84,13 @@ i18n
     },
   });
 
+// Set initial direction based on detected language
+setDocumentDirection(i18n.language || 'en');
+
+// Listen for language changes and update document direction
+i18n.on('languageChanged', (language) => {
+  setDocumentDirection(language);
+});
+
 export default i18n;
+export { isRTL, setDocumentDirection, RTL_LANGUAGES };

@@ -1,15 +1,26 @@
 import React, { lazy, Suspense } from "react"
 import PropTypes from "prop-types"
+import { prefersReducedMotion, getMotionClasses } from "../../utils/motion-preferences"
 
 // Loading component for responses section
-const ResponsesLoadingSpinner = () => (
-  <div className="responses-loading-container">
-    <div className="responses-spinner">
-      <div className="spinner" />
+const ResponsesLoadingSpinner = () => {
+  const reducedMotion = prefersReducedMotion()
+  const containerClass = getMotionClasses("responses-loading-container", "", "reduced-motion")
+  
+  return (
+    <div className={containerClass}>
+      <div className="responses-spinner">
+        <div className={getMotionClasses("spinner", "", "static-spinner")} />
+      </div>
+      <div className="loading-text">Loading response details...</div>
+      {reducedMotion && (
+        <div className="loading-indicator" aria-live="polite">
+          <span>⬇</span>
+        </div>
+      )}
     </div>
-    <div className="loading-text">Loading response details...</div>
-  </div>
-)
+  )
+}
 
 // Lazy load the Responses component
 const LazyResponsesComponent = lazy(() =>

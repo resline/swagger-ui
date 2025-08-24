@@ -126,8 +126,14 @@ services:
     restart: unless-stopped
     environment:
       - discovery.type=single-node
-      - xpack.security.enabled=false
+      - xpack.security.enabled=true
+      - xpack.security.authc.api_key.enabled=true
+      - xpack.security.enrollment.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - xpack.security.transport.ssl.enabled=false
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-changeme}
+      - xpack.security.authc.realms.native.native1.order=0
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
     ports:
@@ -137,10 +143,13 @@ services:
     labels:
       - "com.docker.compose.service=logging"
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      test: ["CMD-SHELL", "curl -u elastic:${ELASTIC_PASSWORD:-changeme} -f http://localhost:9200/_cluster/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 60s
+    security_opt:
+      - no-new-privileges:true
 
   # Kibana for log visualization
   kibana:
@@ -151,6 +160,12 @@ services:
       - "${KIBANA_PORT:-5601}:5601"
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=${KIBANA_SYSTEM_PASSWORD:-changeme}
+      - xpack.security.enabled=true
+      - xpack.security.encryptionKey=${KIBANA_ENCRYPTION_KEY:-changeme32charactersminimumrequired}
+      - xpack.encryptedSavedObjects.encryptionKey=${KIBANA_ENCRYPTION_KEY:-changeme32charactersminimumrequired}
+      - xpack.reporting.encryptionKey=${KIBANA_ENCRYPTION_KEY:-changeme32charactersminimumrequired}
     networks:
       - swagger-network
     depends_on:
@@ -162,24 +177,80 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 60s
+    security_opt:
+      - no-new-privileges:true
 
-  # Filebeat for log shipping
+  # Docker Socket Proxy for secure Docker API access
+  docker-socket-proxy:
+    image: tecnativa/docker-socket-proxy:0.1.1
+    container_name: swagger-docker-socket-proxy
+    restart: unless-stopped
+    environment:
+      - CONTAINERS=1
+      - IMAGES=0
+      - AUTH=0
+      - SECRETS=0
+      - POST=0
+      - BUILD=0
+      - COMMIT=0
+      - CONFIGS=0
+      - DISTRIBUTION=0
+      - EXEC=0
+      - GRPC=0
+      - NETWORKS=0
+      - NODES=0
+      - PLUGINS=0
+      - SERVICES=0
+      - SESSION=0
+      - SWARM=0
+      - SYSTEM=0
+      - TASKS=0
+      - VOLUMES=0
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - swagger-network
+    user: "65534:65534"
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,size=10m
+    labels:
+      - "com.docker.compose.service=security"
+
+  # Filebeat for log shipping (secure non-root version)
   filebeat:
-    image: docker.elastic.co/beats/filebeat:8.8.2
+    build:
+      context: ./monitoring/filebeat
+      dockerfile: Dockerfile
     container_name: swagger-filebeat
     restart: unless-stopped
-    user: root
+    user: "1000:1000"
     volumes:
       - ./monitoring/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - ./logs:/var/log/nginx:ro
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - filebeat-data:/usr/share/filebeat/data
     networks:
       - swagger-network
     depends_on:
       - elasticsearch
+      - docker-socket-proxy
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,size=100m
+      - /var/log/filebeat:noexec,nosuid,size=50m
     labels:
       - "com.docker.compose.service=logging"
+    healthcheck:
+      test: ["CMD-SHELL", "filebeat test output -c /usr/share/filebeat/filebeat.yml || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
 
 volumes:
   prometheus-data:
@@ -187,6 +258,8 @@ volumes:
   grafana-data:
     driver: local
   elasticsearch-data:
+    driver: local
+  filebeat-data:
     driver: local
 
 networks:

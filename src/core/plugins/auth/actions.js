@@ -270,15 +270,15 @@ export function restoreAuthorization(payload) {
   }
 }
 
-export const persistAuthorizationIfNeeded = () => ( { authSelectors, getConfigs } ) => {
+export const persistAuthorizationIfNeeded = () => async ( { authSelectors, getConfigs } ) => {
   const configs = getConfigs()
 
   if (!configs.persistAuthorization) return
 
-  // persist authorization to local storage
+  // persist authorization to local storage with secure encryption
   const authorized = authSelectors.authorized().toJS()
   try {
-    authStorage.setAuth(authorized)
+    await authStorage.setAuth(authorized)
   } catch (e) {
     console.warn("Failed to use secure storage, falling back to localStorage:", e)
     localStorage.setItem("authorized", JSON.stringify(authorized))

@@ -1,0 +1,406 @@
+// Reduced Motion Support for Accessibility
+// WCAG 2.1 guideline compliance for users with vestibular disorders
+// Respects system preferences and provides manual override capabilities
+
+// Global reduced motion overrides based on system preference
+@media (prefers-reduced-motion: reduce) {
+  .swagger-ui {
+    // Disable or reduce all animations and transitions
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    
+    // Specific component overrides for reduced motion
+    
+    // Loading spinners - provide static alternatives
+    .spinner {
+      animation: none !important;
+      border: 3px solid #89bf04;
+      border-radius: 50%;
+      
+      // Add a static visual indicator instead of spinning
+      &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 8px;
+        height: 8px;
+        background: #89bf04;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+    
+    // Operation expand/collapse animations
+    .opblock {
+      .opblock-summary {
+        .opblock-summary-control {
+          transition: none !important;
+          transform: none !important;
+          
+          // Still indicate state but without rotation
+          &[aria-expanded="true"] {
+            .arrow {
+              border-left-color: transparent;
+              border-right-color: currentColor;
+              border-top-color: transparent;
+              border-bottom-color: transparent;
+            }
+          }
+        }
+      }
+      
+      .opblock-body {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+    
+    // Model collapse animations
+    .model-toggle {
+      transition: none !important;
+      transform: none !important;
+      
+      &[aria-expanded="true"] {
+        transform: none !important;
+      }
+    }
+    
+    // Theme toggle transitions
+    .theme-toggle {
+      transition: none !important;
+      
+      &:hover {
+        transition: none !important;
+      }
+    }
+    
+    // Button transitions
+    .btn,
+    button,
+    .button {
+      transition: none !important;
+      
+      &:hover,
+      &:focus,
+      &:active {
+        transition: none !important;
+      }
+    }
+    
+    // Form animations
+    .form-control,
+    input,
+    select,
+    textarea {
+      transition: none !important;
+      
+      &:focus {
+        transition: none !important;
+      }
+    }
+    
+    // Modal animations
+    .modal {
+      transition: none !important;
+      animation: none !important;
+      
+      .modal-ux {
+        transform: translate(-50%, -50%) !important;
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+    
+    // Error state animations
+    .errors-wrapper {
+      animation: none !important;
+      transform: none !important;
+    }
+    
+    // Lazy loading fade-in animations
+    .loading-container,
+    .opblock-loading-container,
+    .models-loading-container,
+    .responses-loading-container {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    
+    // Skip link transitions
+    .skip-link {
+      transition: none !important;
+    }
+    
+    // Layout transitions
+    .topbar,
+    .info,
+    .scheme-container {
+      transition: none !important;
+    }
+    
+    // Dark theme transitions
+    .swagger-ui {
+      transition: none !important;
+    }
+  }
+}
+
+// Manual override class for users who manually disable motion
+.swagger-ui[data-reduced-motion="true"] {
+  // Apply the same rules as the media query
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  // Loading spinners - static alternative
+  .spinner {
+    animation: none !important;
+    border: 3px solid #89bf04;
+    border-radius: 50%;
+    position: relative;
+    
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 8px;
+      height: 8px;
+      background: #89bf04;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+    
+    &::before {
+      content: "Loading";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      color: #666;
+      white-space: nowrap;
+      margin-top: 4px;
+    }
+  }
+  
+  // Apply all the same component-specific rules as the media query
+  .opblock {
+    .opblock-summary {
+      .opblock-summary-control {
+        transition: none !important;
+        transform: none !important;
+        
+        &[aria-expanded="true"] {
+          .arrow {
+            border-left-color: transparent;
+            border-right-color: currentColor;
+            border-top-color: transparent;
+            border-bottom-color: transparent;
+          }
+        }
+      }
+    }
+    
+    .opblock-body {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+  
+  .model-toggle {
+    transition: none !important;
+    transform: none !important;
+    
+    &[aria-expanded="true"] {
+      transform: none !important;
+    }
+  }
+  
+  .theme-toggle {
+    transition: none !important;
+    
+    &:hover {
+      transition: none !important;
+    }
+  }
+  
+  .btn,
+  button,
+  .button {
+    transition: none !important;
+    
+    &:hover,
+    &:focus,
+    &:active {
+      transition: none !important;
+    }
+  }
+  
+  .form-control,
+  input,
+  select,
+  textarea {
+    transition: none !important;
+    
+    &:focus {
+      transition: none !important;
+    }
+  }
+  
+  .modal {
+    transition: none !important;
+    animation: none !important;
+    
+    .modal-ux {
+      transform: translate(-50%, -50%) !important;
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+  
+  .errors-wrapper {
+    animation: none !important;
+    transform: none !important;
+  }
+  
+  .loading-container,
+  .opblock-loading-container,
+  .models-loading-container,
+  .responses-loading-container {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  
+  .skip-link {
+    transition: none !important;
+  }
+  
+  .topbar,
+  .info,
+  .scheme-container {
+    transition: none !important;
+  }
+}
+
+// Provide alternative focus indicators when transitions are disabled
+@media (prefers-reduced-motion: reduce) {
+  .swagger-ui {
+    button:focus,
+    .btn:focus,
+    input:focus,
+    select:focus,
+    textarea:focus,
+    a:focus,
+    [tabindex]:focus {
+      outline: 3px solid #89bf04 !important;
+      outline-offset: 2px !important;
+    }
+  }
+}
+
+.swagger-ui[data-reduced-motion="true"] {
+  button:focus,
+  .btn:focus,
+  input:focus,
+  select:focus,
+  textarea:focus,
+  a:focus,
+  [tabindex]:focus {
+    outline: 3px solid #89bf04 !important;
+    outline-offset: 2px !important;
+  }
+}
+
+// Special handling for essential animations that convey important information
+// These get reduced but not completely removed to preserve functionality
+@media (prefers-reduced-motion: reduce) {
+  .swagger-ui {
+    // Error shake animation - reduce to a brief highlight instead
+    .invalid {
+      animation: none !important;
+      border-color: #f93e3e !important;
+      box-shadow: 0 0 0 2px rgba(249, 62, 62, 0.2) !important;
+    }
+    
+    // Loading states - keep opacity changes but remove transforms
+    .loading-container,
+    .opblock-loading-container {
+      opacity: 0.8;
+      
+      .loading-text {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.swagger-ui[data-reduced-motion="true"] {
+  .invalid {
+    animation: none !important;
+    border-color: #f93e3e !important;
+    box-shadow: 0 0 0 2px rgba(249, 62, 62, 0.2) !important;
+  }
+  
+  .loading-container,
+  .opblock-loading-container {
+    opacity: 0.8;
+    
+    .loading-text {
+      font-weight: bold;
+    }
+  }
+}
+
+// Motion preference toggle component styles
+.motion-preference-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  font-size: 12px;
+  color: white;
+  
+  input[type="checkbox"] {
+    margin-right: 0.25rem;
+  }
+  
+  label {
+    font-size: inherit;
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  // Dark theme styles
+  [data-theme="dark"] & {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+  }
+}
+
+// Screen reader announcements for motion preference changes
+.motion-preference-announcement {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}

@@ -22,6 +22,7 @@
   @include meta.load-css("focus");
   @include meta.load-css("lazy-loading");
   @include meta.load-css("dark-theme");
+  @include meta.load-css("high-contrast");
   @include meta.load-css("theme-toggle");
   @include meta.load-css("language-selector");
   @include meta.load-css("topbar-i18n");
@@ -30,6 +31,8 @@
   @include meta.load-css("focus");
   @include meta.load-css("markdown");
   @include meta.load-css("lazy-loading");
+  @include meta.load-css("rtl");
+  @include meta.load-css("reduced-motion");
   @include meta.load-css("../core/plugins/json-schema-2020-12/components/all");
   @include meta.load-css("../core/plugins/oas31/components/all");
 }

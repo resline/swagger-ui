@@ -398,3 +398,23 @@
 .no-transition * {
   transition: none !important;
 }
+
+// Reduced motion support for theme transitions
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+  
+  // Maintain theme visual state without transitions
+  .swagger-ui {
+    // Ensure immediate theme changes without animation
+    [data-theme="dark"] & {
+      transition: none !important;
+    }
+  }
+}
+
+// Manual reduced motion override for theme transitions
+[data-reduced-motion="true"] * {
+  transition: none !important;
+}

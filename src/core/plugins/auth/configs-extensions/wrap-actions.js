@@ -3,7 +3,7 @@
  */
 import { authStorage } from "core/utils/secure-storage"
 
-export const loaded = (oriAction, system) => (payload) => {
+export const loaded = (oriAction, system) => async (payload) => {
   const { getConfigs, authActions } = system
   const configs = getConfigs()
 
@@ -12,7 +12,7 @@ export const loaded = (oriAction, system) => (payload) => {
   // check if we should restore authorization data from secure storage
   if (configs.persistAuthorization) {
     try {
-      const authorized = authStorage.getAuth()
+      const authorized = await authStorage.getAuth()
       if (authorized) {
         authActions.restoreAuthorization({
           authorized: authorized,
