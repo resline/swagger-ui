@@ -17,6 +17,7 @@ filebeat.inputs:
     - "*"
   combine_partial: true
   tags: ["docker"]
+  hosts: ["tcp://docker-socket-proxy:2375"]
 
 processors:
 - add_host_metadata:
@@ -31,6 +32,8 @@ processors:
 
 output.elasticsearch:
   hosts: ["elasticsearch:9200"]
+  username: "elastic"
+  password: "${ELASTIC_PASSWORD:changeme}"
   index: "swagger-ui-%{+yyyy.MM.dd}"
   template.settings:
     index.number_of_shards: 1
@@ -50,3 +53,5 @@ logging.files:
 monitoring.enabled: true
 monitoring.elasticsearch:
   hosts: ["elasticsearch:9200"]
+  username: "elastic"
+  password: "${ELASTIC_PASSWORD:changeme}"

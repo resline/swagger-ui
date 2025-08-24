@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swagger UI RTL Demo</title>
+    <link rel="stylesheet" href="dist/swagger-ui-bundle.css" />
+    <style>
+        html[dir="rtl"] body {
+            font-family: "Arial", sans-serif;
+        }
+        .demo-controls {
+            padding: 20px;
+            background: #f5f5f5;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+        .demo-controls button {
+            margin: 0 10px;
+            padding: 8px 16px;
+            border: 1px solid #ccc;
+            background: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .demo-controls button:hover {
+            background: #e9e9e9;
+        }
+        .demo-controls .current-lang {
+            font-weight: bold;
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-controls">
+        <h3>RTL Language Support Demo</h3>
+        <button onclick="changeLanguage('en')">English (LTR)</button>
+        <button onclick="changeLanguage('es')">Español (LTR)</button>
+        <button onclick="changeLanguage('ar')">العربية (RTL)</button>
+        <span class="current-lang">Current Language: <span id="current-lang-display">English</span></span>
+        <span class="current-dir">Direction: <span id="current-dir-display">LTR</span></span>
+    </div>
+
+    <div id="swagger-ui"></div>
+
+    <script src="dist/swagger-ui-bundle.js"></script>
+    <script src="dist/swagger-ui-standalone-preset.js"></script>
+    <script>
+        window.onload = function() {
+            // Initialize Swagger UI with i18n support
+            const ui = SwaggerUIBundle({
+                url: 'https://petstore.swagger.io/v2/swagger.json',
+                dom_id: '#swagger-ui',
+                deepLinking: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset
+                ],
+                plugins: [
+                    SwaggerUIBundle.plugins.DownloadUrl
+                ],
+                layout: "StandaloneLayout"
+            });
+
+            window.ui = ui;
+        };
+
+        function changeLanguage(langCode) {
+            // This function simulates language changes
+            // In the actual implementation, this would be handled by the i18n system
+            
+            const langNames = {
+                'en': 'English',
+                'es': 'Español', 
+                'ar': 'العربية'
+            };
+            
+            const directions = {
+                'en': 'ltr',
+                'es': 'ltr',
+                'ar': 'rtl'
+            };
+            
+            // Update HTML attributes
+            document.documentElement.setAttribute('lang', langCode);
+            document.documentElement.setAttribute('dir', directions[langCode]);
+            
+            // Update display
+            document.getElementById('current-lang-display').textContent = langNames[langCode];
+            document.getElementById('current-dir-display').textContent = directions[langCode].toUpperCase();
+            
+            // Apply RTL class for demonstration
+            const swaggerContainer = document.querySelector('.swagger-ui');
+            if (swaggerContainer) {
+                if (directions[langCode] === 'rtl') {
+                    swaggerContainer.classList.add('rtl-demo');
+                } else {
+                    swaggerContainer.classList.remove('rtl-demo');
+                }
+            }
+            
+            console.log(`Language changed to: ${langNames[langCode]} (${directions[langCode].toUpperCase()})`);
+        }
+    </script>
+</body>
+</html>

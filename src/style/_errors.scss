@@ -70,3 +70,25 @@
     opacity: 1;
   }
 }
+
+// Reduced motion support for error states
+@media (prefers-reduced-motion: reduce) {
+  .errors-wrapper {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    
+    // Enhanced visual indicators for reduced motion
+    border-width: 3px;
+    box-shadow: 0 0 0 2px rgba($color-delete, 0.2);
+  }
+}
+
+// Manual reduced motion override
+[data-reduced-motion="true"] .errors-wrapper {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+  border-width: 3px;
+  box-shadow: 0 0 0 2px rgba($color-delete, 0.2);
+}

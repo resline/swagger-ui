@@ -63,6 +63,31 @@ generate_jwt_secret() {
     openssl rand -hex 64
 }
 
+# Function to generate Kibana encryption key (exactly 32 characters)
+generate_kibana_key() {
+    openssl rand -hex 16
+}
+
+# Function to generate all Elasticsearch passwords
+generate_elastic_passwords() {
+    echo -e "${BLUE}🔐 Generating Elasticsearch stack passwords...${NC}"
+    
+    # Generate Elasticsearch superuser password (24 characters)
+    local elastic_password=$(generate_password 24)
+    create_secret "elastic_password" "$elastic_password"
+    
+    # Generate Kibana system user password (20 characters)
+    local kibana_system_password=$(generate_password 20)
+    create_secret "kibana_system_password" "$kibana_system_password"
+    
+    # Generate Kibana encryption key (32 hex characters)
+    local kibana_encryption_key=$(generate_kibana_key)
+    create_secret "kibana_encryption_key" "$kibana_encryption_key"
+    
+    echo -e "${GREEN}✅ Elasticsearch stack passwords generated successfully!${NC}"
+    echo -e "${YELLOW}📋 Don't forget to update your .env file with these credentials${NC}"
+}
+
 # Function to create secret file
 create_secret() {
     local secret_name=$1
@@ -131,6 +156,16 @@ generate_all_secrets() {
     local external_api_key=$(generate_password 32)
     create_secret "external_api_key" "$external_api_key"
     
+    # Generate Elasticsearch stack passwords
+    local elastic_password=$(generate_password 24)
+    create_secret "elastic_password" "$elastic_password"
+    
+    local kibana_system_password=$(generate_password 20)
+    create_secret "kibana_system_password" "$kibana_system_password"
+    
+    local kibana_encryption_key=$(generate_kibana_key)
+    create_secret "kibana_encryption_key" "$kibana_encryption_key"
+    
     echo -e "${GREEN}🎉 All secrets generated successfully!${NC}"
     echo -e "${YELLOW}📋 Remember to:"
     echo -e "   1. Copy secrets from ./secrets/ directory to your .env file"
@@ -168,7 +203,7 @@ generate_ssl_cert() {
 validate_secrets() {
     echo -e "${BLUE}🔍 Validating secrets...${NC}"
     
-    local secrets_list=("api_key" "grafana_password" "db_password" "jwt_secret")
+    local secrets_list=("api_key" "grafana_password" "db_password" "jwt_secret" "elastic_password" "kibana_system_password" "kibana_encryption_key")
     local missing_secrets=()
     
     for secret in "${secrets_list[@]}"; do
@@ -256,6 +291,8 @@ show_help() {
     echo "  generate-all        Generate all required secrets"
     echo "  generate-password   Generate a single secure password (length)"
     echo "  generate-ssl        Generate self-signed SSL certificate"
+    echo "  generate-elastic-passwords  Generate Elasticsearch stack passwords"
+    echo "  generate-kibana-key Generate Kibana encryption key"
     echo "  validate           Validate that all secrets exist"
     echo "  rotate             Rotate all secrets (backup old ones)"
     echo "  status             Show status of all secrets"
@@ -288,6 +325,16 @@ main() {
             ;;
         "generate-ssl")
             generate_ssl_cert "${2:-localhost}"
+            ;;
+        "generate-elastic-passwords")
+            generate_elastic_passwords
+            ;;
+        "generate-kibana-key")
+            echo "Generated Kibana encryption key:"
+            generate_kibana_key
+            echo ""
+            echo "Key length: 32 characters (hex)"
+            echo "Use this for KIBANA_ENCRYPTION_KEY in your .env file"
             ;;
         "validate")
             validate_secrets

@@ -124,6 +124,43 @@ textarea[disabled] {
   }
 }
 
+// Reduced motion support for form animations
+@media (prefers-reduced-motion: reduce) {
+  .checkbox {
+    transition: none !important;
+  }
+  
+  // Replace shake animation with static visual feedback
+  .invalid,
+  input.invalid,
+  select.invalid,
+  textarea.invalid {
+    animation: none !important;
+    border-color: #f93e3e !important;
+    box-shadow: 0 0 0 2px rgba(249, 62, 62, 0.2) !important;
+    outline: 2px solid #f93e3e !important;
+    outline-offset: 1px !important;
+  }
+}
+
+// Manual reduced motion override
+[data-reduced-motion="true"] {
+  .checkbox {
+    transition: none !important;
+  }
+  
+  .invalid,
+  input.invalid,
+  select.invalid,
+  textarea.invalid {
+    animation: none !important;
+    border-color: #f93e3e !important;
+    box-shadow: 0 0 0 2px rgba(249, 62, 62, 0.2) !important;
+    outline: 2px solid #f93e3e !important;
+    outline-offset: 1px !important;
+  }
+}
+
 textarea {
   font-size: 12px;
 

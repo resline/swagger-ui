@@ -1,0 +1,356 @@
+// RTL (Right-to-Left) language support styles
+// This file contains RTL-specific overrides and logical properties
+
+// Apply RTL styles when [dir="rtl"] is present
+[dir="rtl"] .swagger-ui {
+  
+  // Text alignment adjustments
+  .info .title,
+  .info .description,
+  .operation-summary-method,
+  .operation-summary-path,
+  .operation-summary .summary {
+    text-align: right;
+  }
+
+  // Flex direction adjustments for RTL
+  .info .title small,
+  .version-stamp pre.version,
+  .operation-tag {
+    direction: rtl;
+    text-align: right;
+  }
+
+  // Parameter and form field adjustments
+  .parameters .parameter__name,
+  .parameter__type,
+  .parameter__extension {
+    text-align: right;
+  }
+
+  .parameter input[type="text"],
+  .parameter input[type="password"],
+  .parameter input[type="email"],
+  .parameter input[type="url"],
+  .parameter input[type="number"],
+  .parameter textarea,
+  .parameter select {
+    text-align: right;
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  // Language selector adjustments
+  .language-selector {
+    .language-selector__label {
+      margin-right: 0;
+      margin-left: 10px;
+    }
+    
+    .language-selector__select {
+      text-align: right;
+      padding-right: 10px;
+      padding-left: 30px;
+      
+      // Adjust dropdown arrow position
+      background-position: 10px center;
+    }
+  }
+
+  // Button alignments
+  .btn,
+  .authorization__btn,
+  .try-it-out__btn,
+  .execute-wrapper .btn {
+    margin-right: 0;
+    margin-left: 10px;
+    
+    &:first-child {
+      margin-left: 0;
+    }
+    
+    &:last-child {
+      margin-right: 10px;
+    }
+  }
+
+  // Authorization container
+  .auth-container {
+    .auth-wrapper {
+      text-align: right;
+    }
+    
+    .scopes h2,
+    .auth-btn-wrapper {
+      text-align: right;
+    }
+    
+    .scopes .scope-list .scope {
+      text-align: right;
+      
+      .scope-name {
+        margin-right: 0;
+        margin-left: 10px;
+      }
+    }
+  }
+
+  // Operation container adjustments
+  .operation-tag-content {
+    text-align: right;
+  }
+
+  .operation .operation-summary {
+    .operation-summary-method {
+      margin-right: 0;
+      margin-left: 10px;
+    }
+  }
+
+  // Response section
+  .responses-inner {
+    .response .response-col_status {
+      text-align: right;
+    }
+    
+    .response .response-col_description {
+      text-align: right;
+    }
+  }
+
+  // Models section
+  .model-container {
+    .model .model-title {
+      text-align: right;
+    }
+    
+    .model-example,
+    .model-schema {
+      text-align: right;
+    }
+  }
+
+  // Copy to clipboard button positioning
+  .copy-to-clipboard {
+    right: auto;
+    left: 10px;
+  }
+
+  // Curl command display
+  .curl-command {
+    direction: ltr; // Keep code LTR even in RTL context
+    text-align: left;
+  }
+
+  // JSON/XML content should remain LTR
+  .highlight-code,
+  .microlight,
+  pre code,
+  .response-body pre {
+    direction: ltr;
+    text-align: left;
+  }
+
+  // Server selection
+  .servers .servers-title,
+  .servers select {
+    text-align: right;
+  }
+
+  // Modal dialogs
+  .modal-ux .modal-ux-inner {
+    text-align: right;
+    
+    .modal-ux-header h3 {
+      text-align: right;
+    }
+    
+    .modal-ux-content {
+      text-align: right;
+    }
+  }
+
+  // Authorization modal specific adjustments
+  .auth-wrapper .auth-container {
+    .scopes h2 {
+      text-align: right;
+    }
+    
+    .auth-btn-wrapper {
+      justify-content: flex-end;
+      
+      .btn {
+        margin-left: 10px;
+        margin-right: 0;
+        
+        &:first-child {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+
+  // Info section adjustments
+  .information-container {
+    .info {
+      .title {
+        text-align: right;
+      }
+      
+      .base-url {
+        text-align: right;
+      }
+      
+      .description {
+        text-align: right;
+      }
+    }
+  }
+
+  // Table adjustments for RTL
+  table {
+    th, td {
+      text-align: right;
+      
+      &:first-child {
+        border-right: none;
+        border-left: 1px solid var(--border-color, #eeeeee);
+      }
+      
+      &:last-child {
+        border-left: none;
+        border-right: 1px solid var(--border-color, #eeeeee);
+      }
+    }
+  }
+
+  // Expandable sections
+  .expand-operation {
+    .expand-methods {
+      .expand-methods-button {
+        text-align: right;
+      }
+    }
+  }
+
+  // Error messages
+  .errors-wrapper {
+    .error-wrapper {
+      text-align: right;
+      
+      .error .error-line {
+        text-align: right;
+      }
+    }
+  }
+
+  // Skip links for accessibility
+  .skip-links a {
+    text-align: right;
+  }
+
+  // Filter input
+  .filter-container input[type="text"] {
+    text-align: right;
+    padding-right: 10px;
+    padding-left: 40px;
+    
+    &::placeholder {
+      text-align: right;
+    }
+  }
+
+  // Topbar adjustments
+  .topbar {
+    .topbar-wrapper {
+      direction: rtl;
+      
+      .download-url-wrapper {
+        text-align: right;
+        
+        input[type="text"] {
+          text-align: right;
+        }
+      }
+    }
+  }
+
+  // Make sure code blocks and URLs stay LTR
+  code,
+  .uri,
+  .url,
+  pre,
+  .curl,
+  .request-url,
+  .highlight,
+  .json-formatter,
+  .microlight {
+    direction: ltr !important;
+    text-align: left !important;
+    unicode-bidi: embed;
+  }
+
+  // Specific adjustments for complex layouts
+  .scheme-container {
+    text-align: right;
+    
+    .schemes {
+      justify-content: flex-end;
+      
+      .schemes-server-container {
+        text-align: right;
+      }
+    }
+  }
+
+  // Ensure icons and interactive elements are properly positioned
+  .expand,
+  .collapse-icon,
+  .arrow-up,
+  .arrow-down {
+    transform: scaleX(-1); // Mirror icons for RTL
+  }
+
+  // Accordion and collapsible content
+  .opblock .opblock-summary {
+    text-align: right;
+    
+    .opblock-summary-method {
+      margin-right: 0;
+      margin-left: 15px;
+    }
+    
+    .opblock-summary-path {
+      text-align: right;
+    }
+    
+    .opblock-summary-description {
+      text-align: right;
+    }
+  }
+
+  // Parameter description styling
+  .parameter-item {
+    .parameter-item-description {
+      text-align: right;
+    }
+  }
+
+  // Spacing adjustments using logical properties where possible
+  .parameter {
+    margin-inline-start: 0;
+    margin-inline-end: 20px;
+  }
+
+  .btn-group {
+    .btn:not(:last-child) {
+      margin-inline-end: 0;
+      margin-inline-start: -1px;
+    }
+    
+    .btn:not(:first-child) {
+      border-inline-start-width: 0;
+      border-inline-end-width: 1px;
+    }
+  }
+}

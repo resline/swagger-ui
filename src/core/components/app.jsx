@@ -4,9 +4,13 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { getPerformanceMonitor, getWebVitalsTracker } from "core/utils"
+import { initializeMotionPreferences } from "../utils/motion-preferences"
 
 class App extends React.Component {
   componentDidMount() {
+    // Initialize motion preferences for accessibility
+    initializeMotionPreferences()
+    
     // Initialize performance monitoring
     const performanceMonitor = getPerformanceMonitor()
     const webVitalsTracker = getWebVitalsTracker()

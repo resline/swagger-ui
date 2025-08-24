@@ -41,12 +41,27 @@ fi
 
 # enable/disable CORS
 if [ "$CORS" != "true" ]; then
+  # If CORS is disabled, create empty cors.conf in templates directory
+  mkdir -p /etc/nginx/templates
   truncate -s 0 /etc/nginx/templates/cors.conf
+else
+  # Copy the processed CORS configuration to templates directory
+  mkdir -p /etc/nginx/templates
+  if [ -f "/etc/nginx/cors.conf" ]; then
+    cp /etc/nginx/cors.conf /etc/nginx/templates/cors.conf
+  fi
 fi
 
 # allow/disallow embedding the swagger-ui in frames/iframes from different origins
 if [ "$EMBEDDING" != "false" ]; then
+  mkdir -p /etc/nginx/templates
   truncate -s 0 /etc/nginx/templates/embedding.conf
+else
+  # Copy embedding configuration to templates directory
+  mkdir -p /etc/nginx/templates
+  if [ -f "/etc/nginx/embedding.conf" ]; then
+    cp /etc/nginx/embedding.conf /etc/nginx/templates/embedding.conf
+  fi
 fi
 
 find $NGINX_ROOT -type f -regex ".*\.\(html\|js\|css\)" -exec sh -c "gzip < {} > {}.gz" \;

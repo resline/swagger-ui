@@ -108,3 +108,60 @@
     transform: translateY(0);
   }
 }
+
+// Static alternatives for reduced motion
+.static-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #89bf04;
+  border-radius: 50%;
+  position: relative;
+  
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    background: #89bf04;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.opblock-loading-container .static-spinner {
+  width: 24px;
+  height: 24px;
+  border-width: 2px;
+  
+  &::after {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+// Loading indicator for reduced motion
+.loading-indicator {
+  margin-top: 0.5rem;
+  font-size: 16px;
+  color: #89bf04;
+  text-align: center;
+  
+  span {
+    display: inline-block;
+    font-weight: bold;
+  }
+}
+
+// Reduced motion container styles
+.reduced-motion {
+  &.loading-container,
+  &.opblock-loading-container,
+  &.models-loading-container,
+  &.responses-loading-container {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}

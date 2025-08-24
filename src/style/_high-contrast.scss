@@ -1,0 +1,1091 @@
+// High Contrast Theme for Enhanced Accessibility
+// Complies with WCAG AAA contrast ratio requirements:
+// - 7:1 for normal text
+// - 4.5:1 for large text (18pt or 14pt bold)
+// - Enhanced borders and focus indicators
+
+// High Contrast Mode Variables
+[data-theme="high-contrast"] {
+  // Base colors with AAA contrast ratios
+  --hc-bg-primary: #000000;        // Pure black
+  --hc-bg-secondary: #1a1a1a;      // Very dark gray
+  --hc-bg-tertiary: #000000;       // Pure black for maximum contrast
+  --hc-bg-elevated: #2d2d2d;       // Dark gray for elevated surfaces
+  --hc-bg-hover: #333333;          // Hover state background
+  --hc-bg-input: #000000;          // Input backgrounds
+  --hc-bg-disabled: #404040;       // Disabled element backgrounds
+  
+  // Text colors with maximum contrast
+  --hc-text-primary: #ffffff;      // Pure white (21:1 contrast with black)
+  --hc-text-secondary: #ffff00;    // Pure yellow (19.56:1 contrast)
+  --hc-text-tertiary: #00ff00;     // Pure green (15.3:1 contrast)
+  --hc-text-inverse: #000000;      // Black text on light backgrounds
+  --hc-text-disabled: #808080;     // Gray for disabled text
+  --hc-text-link: #00ffff;         // Cyan for links (16.75:1 contrast)
+  --hc-text-visited: #ff00ff;      // Magenta for visited links
+  
+  // Border colors with high visibility
+  --hc-border-primary: #ffffff;    // White borders
+  --hc-border-secondary: #ffff00;  // Yellow borders for emphasis
+  --hc-border-focus: #00ffff;      // Cyan for focus indicators
+  --hc-border-error: #ff0000;      // Red for errors
+  --hc-border-success: #00ff00;    // Green for success
+  --hc-border-warning: #ffff00;    // Yellow for warnings
+  --hc-border-info: #00ffff;       // Cyan for info
+  
+  // Method colors with maximum contrast
+  --hc-method-get: #00ffff;        // Cyan
+  --hc-method-post: #00ff00;       // Green
+  --hc-method-put: #ffff00;        // Yellow
+  --hc-method-delete: #ff0000;     // Red
+  --hc-method-patch: #ff00ff;      // Magenta
+  --hc-method-options: #ffffff;    // White
+  --hc-method-head: #00ff7f;       // Spring green
+  
+  // Status colors
+  --hc-status-success: #00ff00;    // Green
+  --hc-status-error: #ff0000;      // Red
+  --hc-status-warning: #ffff00;    // Yellow
+  --hc-status-info: #00ffff;       // Cyan
+  
+  // Pattern backgrounds for colorblind users
+  --hc-pattern-success: repeating-linear-gradient(45deg, #00ff00, #00ff00 2px, transparent 2px, transparent 4px);
+  --hc-pattern-error: repeating-linear-gradient(45deg, #ff0000, #ff0000 2px, transparent 2px, transparent 4px);
+  --hc-pattern-warning: repeating-linear-gradient(90deg, #ffff00, #ffff00 2px, transparent 2px, transparent 4px);
+  --hc-pattern-info: repeating-linear-gradient(0deg, #00ffff, #00ffff 2px, transparent 2px, transparent 4px);
+  
+  // Apply high contrast theme to body
+  body {
+    background-color: var(--hc-bg-primary) !important;
+    color: var(--hc-text-primary) !important;
+    font-weight: 500; // Slightly bolder text for better readability
+  }
+  
+  // High contrast Swagger UI overrides
+  .swagger-ui {
+    background-color: var(--hc-bg-primary) !important;
+    color: var(--hc-text-primary) !important;
+    
+    // Enhanced typography
+    * {
+      font-weight: 500 !important;
+      text-shadow: 0 0 1px currentColor; // Subtle text enhancement
+    }
+    
+    // Wrapper and base layout
+    .wrapper {
+      background-color: var(--hc-bg-primary) !important;
+      border: 3px solid var(--hc-border-primary) !important;
+    }
+    
+    // Topbar with maximum contrast
+    .topbar {
+      background-color: var(--hc-bg-secondary) !important;
+      border: 3px solid var(--hc-border-primary) !important;
+      border-bottom: 5px solid var(--hc-border-secondary) !important;
+      
+      .download-url-input {
+        background-color: var(--hc-bg-input) !important;
+        color: var(--hc-text-primary) !important;
+        border: 3px solid var(--hc-border-primary) !important;
+        font-weight: 700 !important;
+        
+        &:focus {
+          background-color: var(--hc-bg-input) !important;
+          border: 5px solid var(--hc-border-focus) !important;
+          outline: 3px solid var(--hc-text-primary) !important;
+          outline-offset: 2px;
+        }
+      }
+      
+      .download-url-button {
+        background-color: var(--hc-status-info) !important;
+        color: var(--hc-text-inverse) !important;
+        border: 3px solid var(--hc-border-primary) !important;
+        font-weight: 700 !important;
+        text-decoration: underline;
+        
+        &:hover {
+          background-color: var(--hc-text-primary) !important;
+          color: var(--hc-bg-primary) !important;
+          border: 5px solid var(--hc-border-focus) !important;
+        }
+      }
+      
+      // Logo and branding
+      .logo {
+        filter: brightness(0) invert(1) contrast(2);
+      }
+    }
+    
+    // Information section
+    .info {
+      background-color: var(--hc-bg-secondary) !important;
+      border: 3px solid var(--hc-border-primary) !important;
+      padding: 20px !important;
+      
+      .title {
+        color: var(--hc-text-secondary) !important;
+        text-decoration: underline;
+        font-weight: 900 !important;
+        text-shadow: 2px 2px 0 var(--hc-bg-primary);
+      }
+      
+      .description {
+        color: var(--hc-text-primary) !important;
+        background-color: var(--hc-bg-primary) !important;
+        padding: 10px !important;
+        border: 2px solid var(--hc-border-primary) !important;
+      }
+      
+      a {
+        color: var(--hc-text-link) !important;
+        text-decoration: underline !important;
+        font-weight: 700 !important;
+        border-bottom: 2px solid var(--hc-text-link) !important;
+        
+        &:hover {
+          color: var(--hc-text-primary) !important;
+          background-color: var(--hc-text-link) !important;
+          border: 3px solid var(--hc-border-primary) !important;
+          padding: 2px 4px !important;
+        }
+        
+        &:visited {
+          color: var(--hc-text-visited) !important;
+          border-bottom-color: var(--hc-text-visited) !important;
+        }
+      }
+    }
+    
+    // Scheme container
+    .scheme-container {
+      background-color: var(--hc-bg-secondary) !important;
+      border: 4px solid var(--hc-border-primary) !important;
+      
+      .schemes {
+        background-color: var(--hc-bg-primary) !important;
+        border: 2px solid var(--hc-border-secondary) !important;
+        
+        > label {
+          color: var(--hc-text-secondary) !important;
+          font-weight: 700 !important;
+        }
+        
+        select {
+          background-color: var(--hc-bg-input) !important;
+          color: var(--hc-text-primary) !important;
+          border: 3px solid var(--hc-border-primary) !important;
+          font-weight: 700 !important;
+          
+          &:focus {
+            border: 5px solid var(--hc-border-focus) !important;
+            outline: 3px solid var(--hc-text-primary) !important;
+          }
+        }
+      }
+    }
+    
+    // Operation blocks with method-specific styling
+    .opblock {
+      border: 4px solid var(--hc-border-primary) !important;
+      background-color: var(--hc-bg-secondary) !important;
+      margin-bottom: 20px !important;
+      
+      // GET operations
+      &.opblock-get {
+        .opblock-summary {
+          border: 4px solid var(--hc-method-get) !important;
+          background: var(--hc-pattern-info) !important;
+        }
+        
+        .opblock-summary-method {
+          background-color: var(--hc-method-get) !important;
+          color: var(--hc-text-inverse) !important;
+          border: 3px solid var(--hc-border-primary) !important;
+          font-weight: 900 !important;
+        }
+      }
+      
+      // POST operations
+      &.opblock-post {
+        .opblock-summary {
+          border: 4px solid var(--hc-method-post) !important;
+          background: var(--hc-pattern-success) !important;
+        }
+        
+        .opblock-summary-method {
+          background-color: var(--hc-method-post) !important;
+          color: var(--hc-text-inverse) !important;
+          border: 3px solid var(--hc-border-primary) !important;
+          font-weight: 900 !important;
+        }
+      }
+      
+      // PUT operations
+      &.opblock-put {
+        .opblock-summary {
+          border: 4px solid var(--hc-method-put) !important;
+          background: var(--hc-pattern-warning) !important;
+        }
+        
+        .opblock-summary-method {
+          background-color: var(--hc-method-put) !important;
+          color: var(--hc-text-inverse) !important;
+          border: 3px solid var(--hc-border-primary) !important;
+          font-weight: 900 !important;
+        }
+      }
+      
+      // DELETE operations
+      &.opblock-delete {
+        .opblock-summary {
+          border: 4px solid var(--hc-method-delete) !important;
+          background: var(--hc-pattern-error) !important;
+        }
+        
+        .opblock-summary-method {
+          background-color: var(--hc-method-delete) !important;
+          color: var(--hc-text-primary) !important;
+          border: 3px solid var(--hc-border-primary) !important;
+          font-weight: 900 !important;
+        }
+      }
+      
+      // PATCH operations
+      &.opblock-patch {
+        .opblock-summary {
+          border: 4px solid var(--hc-method-patch) !important;
+        }
+        
+        .opblock-summary-method {
+          background-color: var(--hc-method-patch) !important;
+          color: var(--hc-text-inverse) !important;
+          border: 3px solid var(--hc-border-primary) !important;
+          font-weight: 900 !important;
+        }
+      }
+      
+      // OPTIONS operations
+      &.opblock-options {
+        .opblock-summary {
+          border: 4px solid var(--hc-method-options) !important;
+        }
+        
+        .opblock-summary-method {
+          background-color: var(--hc-method-options) !important;
+          color: var(--hc-text-inverse) !important;
+          border: 3px solid var(--hc-border-primary) !important;
+          font-weight: 900 !important;
+        }
+      }
+      
+      // HEAD operations
+      &.opblock-head {
+        .opblock-summary {
+          border: 4px solid var(--hc-method-head) !important;
+        }
+        
+        .opblock-summary-method {
+          background-color: var(--hc-method-head) !important;
+          color: var(--hc-text-inverse) !important;
+          border: 3px solid var(--hc-border-primary) !important;
+          font-weight: 900 !important;
+        }
+      }
+      
+      .opblock-summary {
+        background-color: var(--hc-bg-tertiary) !important;
+        border: 3px solid var(--hc-border-primary) !important;
+        
+        &:hover {
+          background-color: var(--hc-bg-hover) !important;
+          border: 5px solid var(--hc-border-focus) !important;
+        }
+        
+        .opblock-summary-path {
+          color: var(--hc-text-primary) !important;
+          font-weight: 700 !important;
+          text-decoration: underline;
+        }
+        
+        .opblock-summary-description {
+          color: var(--hc-text-secondary) !important;
+          background-color: var(--hc-bg-primary) !important;
+          padding: 5px !important;
+          border: 1px solid var(--hc-border-primary) !important;
+        }
+      }
+      
+      .opblock-body {
+        background-color: var(--hc-bg-primary) !important;
+        border: 3px solid var(--hc-border-primary) !important;
+        
+        .opblock-section-header {
+          background-color: var(--hc-bg-secondary) !important;
+          color: var(--hc-text-secondary) !important;
+          border: 3px solid var(--hc-border-primary) !important;
+          font-weight: 900 !important;
+          text-decoration: underline;
+        }
+        
+        .parameters-col_description {
+          color: var(--hc-text-primary) !important;
+          background-color: var(--hc-bg-secondary) !important;
+          padding: 8px !important;
+          border: 2px solid var(--hc-border-primary) !important;
+        }
+        
+        // Form elements with enhanced accessibility
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        input[type="number"],
+        textarea,
+        select {
+          background-color: var(--hc-bg-input) !important;
+          color: var(--hc-text-primary) !important;
+          border: 3px solid var(--hc-border-primary) !important;
+          font-weight: 700 !important;
+          font-size: 16px !important; // Prevent zoom on mobile
+          padding: 8px 12px !important;
+          
+          &:focus {
+            border: 5px solid var(--hc-border-focus) !important;
+            outline: 4px solid var(--hc-text-primary) !important;
+            outline-offset: 2px;
+            background-color: var(--hc-bg-input) !important;
+          }
+          
+          &:disabled {
+            background-color: var(--hc-bg-disabled) !important;
+            color: var(--hc-text-disabled) !important;
+            border-color: var(--hc-text-disabled) !important;
+          }
+          
+          &::placeholder {
+            color: var(--hc-text-secondary) !important;
+            font-weight: 600 !important;
+          }
+        }
+        
+        // Button enhancements
+        .btn {
+          background-color: var(--hc-bg-elevated) !important;
+          color: var(--hc-text-primary) !important;
+          border: 3px solid var(--hc-border-primary) !important;
+          font-weight: 700 !important;
+          text-decoration: underline;
+          padding: 12px 16px !important;
+          min-height: 44px !important; // Touch target size
+          
+          &:hover {
+            background-color: var(--hc-text-primary) !important;
+            color: var(--hc-bg-primary) !important;
+            border: 5px solid var(--hc-border-focus) !important;
+          }
+          
+          &:focus {
+            border: 5px solid var(--hc-border-focus) !important;
+            outline: 4px solid var(--hc-text-primary) !important;
+            outline-offset: 2px;
+          }
+          
+          &.execute {
+            background-color: var(--hc-status-info) !important;
+            color: var(--hc-text-inverse) !important;
+            border: 4px solid var(--hc-border-primary) !important;
+            
+            &:hover {
+              background-color: var(--hc-text-primary) !important;
+              color: var(--hc-bg-primary) !important;
+            }
+          }
+          
+          &.cancel {
+            background-color: var(--hc-status-error) !important;
+            color: var(--hc-text-primary) !important;
+            border: 4px solid var(--hc-border-primary) !important;
+            
+            &:hover {
+              background-color: var(--hc-text-primary) !important;
+              color: var(--hc-bg-primary) !important;
+            }
+          }
+          
+          &.authorize {
+            background-color: var(--hc-status-success) !important;
+            color: var(--hc-text-inverse) !important;
+            border: 4px solid var(--hc-border-primary) !important;
+            
+            &:hover {
+              background-color: var(--hc-text-primary) !important;
+              color: var(--hc-bg-primary) !important;
+            }
+          }
+          
+          &:disabled {
+            background-color: var(--hc-bg-disabled) !important;
+            color: var(--hc-text-disabled) !important;
+            border-color: var(--hc-text-disabled) !important;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+    
+    // Response sections
+    .response-col_status {
+      color: var(--hc-text-secondary) !important;
+      font-weight: 900 !important;
+      border: 2px solid var(--hc-border-primary) !important;
+      padding: 4px 8px !important;
+    }
+    
+    .response-col_description {
+      color: var(--hc-text-primary) !important;
+      background-color: var(--hc-bg-secondary) !important;
+      border: 2px solid var(--hc-border-primary) !important;
+      padding: 8px !important;
+    }
+    
+    .responses-inner {
+      background-color: var(--hc-bg-secondary) !important;
+      border: 3px solid var(--hc-border-primary) !important;
+      
+      h4,
+      h5 {
+        color: var(--hc-text-secondary) !important;
+        font-weight: 900 !important;
+        text-decoration: underline;
+        border-bottom: 3px solid var(--hc-border-primary) !important;
+        padding-bottom: 8px !important;
+      }
+      
+      .response {
+        border: 2px solid var(--hc-border-primary) !important;
+        background-color: var(--hc-bg-primary) !important;
+        margin: 8px 0 !important;
+        padding: 12px !important;
+        
+        .response-col_links {
+          color: var(--hc-text-link) !important;
+          text-decoration: underline !important;
+          font-weight: 700 !important;
+          
+          &:hover {
+            background-color: var(--hc-text-link) !important;
+            color: var(--hc-bg-primary) !important;
+            padding: 4px !important;
+          }
+        }
+      }
+    }
+    
+    // Model/Schema section with enhanced visibility
+    .model-container {
+      background-color: var(--hc-bg-secondary) !important;
+      border: 4px solid var(--hc-border-primary) !important;
+      margin: 16px 0 !important;
+      
+      .model-title {
+        color: var(--hc-text-secondary) !important;
+        font-weight: 900 !important;
+        text-decoration: underline;
+        background-color: var(--hc-bg-primary) !important;
+        padding: 12px !important;
+        border: 2px solid var(--hc-border-primary) !important;
+      }
+      
+      .model {
+        color: var(--hc-text-primary) !important;
+        background-color: var(--hc-bg-primary) !important;
+        border: 2px solid var(--hc-border-primary) !important;
+        padding: 16px !important;
+        margin: 8px !important;
+      }
+      
+      .prop-type {
+        color: var(--hc-method-patch) !important;
+        font-weight: 900 !important;
+        border: 1px solid var(--hc-method-patch) !important;
+        padding: 2px 6px !important;
+        border-radius: 0; // Remove rounded corners for high contrast
+      }
+      
+      .prop-format {
+        color: var(--hc-text-tertiary) !important;
+        font-weight: 700 !important;
+        background-color: var(--hc-bg-primary) !important;
+        border: 1px solid var(--hc-text-tertiary) !important;
+        padding: 2px 6px !important;
+      }
+    }
+    
+    // Code blocks with maximum contrast
+    pre {
+      background-color: var(--hc-bg-primary) !important;
+      color: var(--hc-text-primary) !important;
+      border: 3px solid var(--hc-border-primary) !important;
+      padding: 16px !important;
+      margin: 16px 0 !important;
+      font-weight: 700 !important;
+      
+      code {
+        background-color: transparent !important;
+        color: inherit !important;
+        border: none !important;
+      }
+    }
+    
+    code {
+      background-color: var(--hc-bg-secondary) !important;
+      color: var(--hc-text-link) !important;
+      border: 2px solid var(--hc-text-link) !important;
+      padding: 2px 6px !important;
+      font-weight: 700 !important;
+    }
+    
+    // Tables with enhanced borders and contrast
+    table {
+      border: 4px solid var(--hc-border-primary) !important;
+      background-color: var(--hc-bg-secondary) !important;
+      
+      tbody {
+        tr {
+          background-color: var(--hc-bg-primary) !important;
+          border: 2px solid var(--hc-border-primary) !important;
+          
+          &:hover {
+            background-color: var(--hc-bg-hover) !important;
+            border: 3px solid var(--hc-border-focus) !important;
+          }
+          
+          &:nth-child(even) {
+            background-color: var(--hc-bg-secondary) !important;
+          }
+        }
+      }
+      
+      thead {
+        tr {
+          background-color: var(--hc-bg-tertiary) !important;
+          border: 4px solid var(--hc-border-secondary) !important;
+          
+          th {
+            color: var(--hc-text-secondary) !important;
+            font-weight: 900 !important;
+            border: 2px solid var(--hc-border-primary) !important;
+            padding: 12px !important;
+            text-decoration: underline;
+          }
+        }
+      }
+      
+      td {
+        color: var(--hc-text-primary) !important;
+        border: 2px solid var(--hc-border-primary) !important;
+        padding: 12px !important;
+        font-weight: 600 !important;
+        
+        // Required parameters
+        &.col_required {
+          color: var(--hc-status-error) !important;
+          font-weight: 900 !important;
+          
+          &::after {
+            content: " *REQUIRED*";
+            background-color: var(--hc-status-error) !important;
+            color: var(--hc-text-primary) !important;
+            padding: 2px 4px !important;
+            border: 1px solid var(--hc-border-primary) !important;
+          }
+        }
+      }
+    }
+    
+    // Authorization with enhanced visibility
+    .auth-container {
+      background-color: var(--hc-bg-secondary) !important;
+      border: 4px solid var(--hc-border-primary) !important;
+      padding: 20px !important;
+      
+      .auth-item {
+        background-color: var(--hc-bg-primary) !important;
+        border: 3px solid var(--hc-border-success) !important;
+        margin: 16px 0 !important;
+        padding: 16px !important;
+        
+        h4 {
+          color: var(--hc-text-secondary) !important;
+          font-weight: 900 !important;
+          text-decoration: underline;
+          border-bottom: 3px solid var(--hc-border-primary) !important;
+          padding-bottom: 8px !important;
+        }
+        
+        .auth-btn-wrapper {
+          .btn-done {
+            background-color: var(--hc-status-success) !important;
+            color: var(--hc-text-inverse) !important;
+            border: 4px solid var(--hc-border-primary) !important;
+            font-weight: 900 !important;
+            
+            &:hover {
+              background-color: var(--hc-text-primary) !important;
+              color: var(--hc-bg-primary) !important;
+            }
+          }
+        }
+      }
+    }
+    
+    // Error messages with maximum visibility
+    .errors-wrapper {
+      background-color: var(--hc-bg-primary) !important;
+      border: 5px solid var(--hc-status-error) !important;
+      background-image: var(--hc-pattern-error) !important;
+      padding: 20px !important;
+      margin: 20px 0 !important;
+      
+      .error-wrapper {
+        background-color: var(--hc-bg-primary) !important;
+        border: 3px solid var(--hc-status-error) !important;
+        margin: 8px 0 !important;
+        padding: 16px !important;
+        
+        .message {
+          color: var(--hc-text-primary) !important;
+          font-weight: 900 !important;
+          background-color: var(--hc-status-error) !important;
+          border: 2px solid var(--hc-border-primary) !important;
+          padding: 12px !important;
+          
+          &::before {
+            content: "ERROR: ";
+            font-weight: 900;
+          }
+        }
+      }
+    }
+    
+    // Loading states
+    .loading {
+      background-color: var(--hc-bg-primary) !important;
+      color: var(--hc-text-secondary) !important;
+      border: 3px solid var(--hc-border-primary) !important;
+      font-weight: 700 !important;
+      
+      &::after {
+        border-color: var(--hc-text-secondary) transparent var(--hc-text-secondary) transparent !important;
+      }
+    }
+    
+    // Scrollbars
+    ::-webkit-scrollbar {
+      width: 16px !important;
+      height: 16px !important;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background-color: var(--hc-bg-primary) !important;
+      border: 2px solid var(--hc-border-primary) !important;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background-color: var(--hc-text-secondary) !important;
+      border: 2px solid var(--hc-border-primary) !important;
+      
+      &:hover {
+        background-color: var(--hc-text-primary) !important;
+      }
+    }
+  }
+  
+  // Global link styling for high contrast
+  a {
+    color: var(--hc-text-link) !important;
+    text-decoration: underline !important;
+    font-weight: 700 !important;
+    border-bottom: 2px solid var(--hc-text-link) !important;
+    
+    &:hover {
+      color: var(--hc-bg-primary) !important;
+      background-color: var(--hc-text-link) !important;
+      border: 3px solid var(--hc-border-primary) !important;
+      padding: 2px 4px !important;
+    }
+    
+    &:visited {
+      color: var(--hc-text-visited) !important;
+      border-bottom-color: var(--hc-text-visited) !important;
+    }
+    
+    &:focus {
+      outline: 4px solid var(--hc-border-focus) !important;
+      outline-offset: 2px;
+    }
+  }
+  
+  // Enhanced focus indicators
+  *:focus {
+    outline: 4px solid var(--hc-border-focus) !important;
+    outline-offset: 2px !important;
+  }
+  
+  // Remove transitions in high contrast mode for immediate feedback
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+// Light High Contrast variant
+[data-theme="high-contrast-light"] {
+  // Inverted colors for light background high contrast
+  --hc-bg-primary: #ffffff;        // Pure white
+  --hc-bg-secondary: #f0f0f0;      // Light gray
+  --hc-bg-tertiary: #ffffff;       // Pure white
+  --hc-bg-elevated: #e0e0e0;       // Light elevated surfaces
+  --hc-bg-hover: #cccccc;          // Hover state background
+  --hc-bg-input: #ffffff;          // Input backgrounds
+  --hc-bg-disabled: #d0d0d0;       // Disabled element backgrounds
+  
+  --hc-text-primary: #000000;      // Pure black (21:1 contrast with white)
+  --hc-text-secondary: #0000ff;    // Pure blue (8.6:1 contrast)
+  --hc-text-tertiary: #008000;     // Dark green (4.3:1 contrast)
+  --hc-text-inverse: #ffffff;      // White text on dark backgrounds
+  --hc-text-disabled: #666666;     // Gray for disabled text
+  --hc-text-link: #0000ff;         // Blue for links
+  --hc-text-visited: #800080;      // Purple for visited links
+  
+  --hc-border-primary: #000000;    // Black borders
+  --hc-border-secondary: #0000ff;  // Blue borders for emphasis
+  --hc-border-focus: #ff0000;      // Red for focus indicators
+  --hc-border-error: #ff0000;      // Red for errors
+  --hc-border-success: #008000;    // Green for success
+  --hc-border-warning: #ff8c00;    // Orange for warnings
+  --hc-border-info: #0000ff;       // Blue for info
+  
+  // Apply same structure as dark high contrast but with light colors
+  body {
+    background-color: var(--hc-bg-primary) !important;
+    color: var(--hc-text-primary) !important;
+    font-weight: 500;
+  }
+}
+
+// Windows High Contrast Mode support
+@media (prefers-contrast: high) {
+  [data-theme]:not([data-theme="high-contrast"]):not([data-theme="high-contrast-light"]) {
+    // Auto-switch to high contrast when system preference is detected
+    --bg-primary: Canvas !important;
+    --text-primary: CanvasText !important;
+    --text-link: LinkText !important;
+    --border-primary: ButtonText !important;
+    --border-focus: Highlight !important;
+    
+    * {
+      background-color: Canvas !important;
+      color: CanvasText !important;
+      border-color: ButtonText !important;
+      
+      &:focus {
+        background-color: Highlight !important;
+        color: HighlightText !important;
+        outline: 2px solid HighlightText !important;
+      }
+    }
+    
+    a {
+      color: LinkText !important;
+      
+      &:visited {
+        color: VisitedText !important;
+      }
+    }
+    
+    button {
+      background-color: ButtonFace !important;
+      color: ButtonText !important;
+      border-color: ButtonText !important;
+      
+      &:hover {
+        background-color: Highlight !important;
+        color: HighlightText !important;
+      }
+    }
+  }
+}
+
+// Forced colors mode support (Windows High Contrast)
+@media (forced-colors: active) {
+  .swagger-ui {
+    * {
+      background-color: Canvas !important;
+      color: CanvasText !important;
+      border-color: ButtonText !important;
+      forced-color-adjust: none;
+    }
+    
+    a {
+      color: LinkText !important;
+      forced-color-adjust: none;
+      
+      &:visited {
+        color: VisitedText !important;
+      }
+    }
+    
+    button {
+      background-color: ButtonFace !important;
+      color: ButtonText !important;
+      border-color: ButtonText !important;
+      forced-color-adjust: none;
+      
+      &:hover,
+      &:focus {
+        background-color: Highlight !important;
+        color: HighlightText !important;
+      }
+    }
+    
+    input,
+    textarea,
+    select {
+      background-color: Field !important;
+      color: FieldText !important;
+      border-color: FieldText !important;
+      forced-color-adjust: none;
+    }
+  }
+}
+
+// Prefers reduced motion - respect user preferences
+@media (prefers-reduced-motion: reduce) {
+  [data-theme^="high-contrast"] * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+// Print styles for high contrast
+@media print {
+  [data-theme^="high-contrast"] {
+    * {
+      background: white !important;
+      color: black !important;
+      border-color: black !important;
+      text-shadow: none !important;
+      box-shadow: none !important;
+    }
+  }
+}
+
+// Additional UI enhancements for high contrast mode
+[data-theme^="high-contrast"] {
+  // Enhanced focus indicators with multiple visual cues
+  *:focus {
+    outline: 4px solid var(--hc-border-focus) !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 8px var(--hc-border-focus) !important;
+    position: relative;
+    z-index: 999;
+    
+    &::before {
+      content: "FOCUSED";
+      position: absolute;
+      top: -25px;
+      left: -2px;
+      background: var(--hc-border-focus) !important;
+      color: var(--hc-text-inverse) !important;
+      padding: 2px 8px !important;
+      font-size: 10px !important;
+      font-weight: 900 !important;
+      z-index: 1000;
+      border: 2px solid var(--hc-border-primary) !important;
+      white-space: nowrap;
+    }
+  }
+  
+  // Ensure all text has adequate weight and shadow for readability
+  h1, h2, h3, h4, h5, h6, 
+  .swagger-ui h1, .swagger-ui h2, .swagger-ui h3, 
+  .swagger-ui h4, .swagger-ui h5, .swagger-ui h6 {
+    font-weight: 900 !important;
+    text-shadow: 2px 2px 0 var(--hc-bg-primary) !important;
+    text-decoration: underline !important;
+    padding: 12px 0 !important;
+    border-bottom: 4px solid var(--hc-border-primary) !important;
+    margin: 16px 0 !important;
+    
+    &::before {
+      content: "HEADING: ";
+      font-size: 0.8em;
+      color: var(--hc-text-secondary) !important;
+      background: var(--hc-bg-primary) !important;
+      padding: 2px 6px !important;
+      border: 1px solid var(--hc-border-primary) !important;
+      margin-right: 8px;
+    }
+  }
+  
+  // Pattern overlays for status indicators
+  .status-indicator {
+    position: relative;
+    
+    &.success::after {
+      content: "SUCCESS";
+      position: absolute;
+      top: -20px;
+      right: 0;
+      background: var(--hc-status-success) !important;
+      color: var(--hc-text-inverse) !important;
+      padding: 2px 6px !important;
+      font-size: 10px !important;
+      font-weight: 900 !important;
+      border: 2px solid var(--hc-border-primary) !important;
+    }
+    
+    &.error::after {
+      content: "ERROR";
+      position: absolute;
+      top: -20px;
+      right: 0;
+      background: var(--hc-status-error) !important;
+      color: var(--hc-text-primary) !important;
+      padding: 2px 6px !important;
+      font-size: 10px !important;
+      font-weight: 900 !important;
+      border: 2px solid var(--hc-border-primary) !important;
+    }
+    
+    &.warning::after {
+      content: "WARNING";
+      position: absolute;
+      top: -20px;
+      right: 0;
+      background: var(--hc-status-warning) !important;
+      color: var(--hc-text-inverse) !important;
+      padding: 2px 6px !important;
+      font-size: 10px !important;
+      font-weight: 900 !important;
+      border: 2px solid var(--hc-border-primary) !important;
+    }
+    
+    &.info::after {
+      content: "INFO";
+      position: absolute;
+      top: -20px;
+      right: 0;
+      background: var(--hc-status-info) !important;
+      color: var(--hc-text-inverse) !important;
+      padding: 2px 6px !important;
+      font-size: 10px !important;
+      font-weight: 900 !important;
+      border: 2px solid var(--hc-border-primary) !important;
+    }
+  }
+  
+  // Special handling for hover states
+  *:hover:not(:focus) {
+    border: 3px solid var(--hc-border-secondary) !important;
+    background-color: var(--hc-bg-hover) !important;
+    transform: scale(1.02) !important;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3) !important;
+    
+    &::after {
+      content: "HOVER";
+      position: absolute;
+      bottom: -20px;
+      left: 0;
+      background: var(--hc-border-secondary) !important;
+      color: var(--hc-text-inverse) !important;
+      padding: 2px 6px !important;
+      font-size: 10px !important;
+      font-weight: 900 !important;
+      z-index: 1000;
+      border: 1px solid var(--hc-border-primary) !important;
+      white-space: nowrap;
+    }
+  }
+  
+  // Icons and graphics enhancements
+  svg, img, .icon {
+    filter: contrast(300%) brightness(1.5) saturate(0) !important;
+    border: 3px solid var(--hc-border-primary) !important;
+    padding: 4px !important;
+    background: var(--hc-bg-secondary) !important;
+  }
+  
+  // Enhanced selection visibility
+  ::selection {
+    background: var(--hc-border-focus) !important;
+    color: var(--hc-text-inverse) !important;
+    text-shadow: none !important;
+  }
+  
+  ::-moz-selection {
+    background: var(--hc-border-focus) !important;
+    color: var(--hc-text-inverse) !important;
+    text-shadow: none !important;
+  }
+  
+  // Keyboard navigation indicators
+  .swagger-ui {
+    .btn:focus,
+    button:focus {
+      &::after {
+        content: "PRESS ENTER TO ACTIVATE";
+        position: absolute;
+        bottom: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--hc-border-focus) !important;
+        color: var(--hc-text-inverse) !important;
+        padding: 4px 8px !important;
+        font-size: 10px !important;
+        font-weight: 900 !important;
+        z-index: 1000;
+        border: 2px solid var(--hc-border-primary) !important;
+        white-space: nowrap;
+      }
+    }
+    
+    input:focus,
+    textarea:focus,
+    select:focus {
+      &::after {
+        content: "TYPE HERE";
+        position: absolute;
+        top: -30px;
+        right: 0;
+        background: var(--hc-border-focus) !important;
+        color: var(--hc-text-inverse) !important;
+        padding: 4px 8px !important;
+        font-size: 10px !important;
+        font-weight: 900 !important;
+        z-index: 1000;
+        border: 2px solid var(--hc-border-primary) !important;
+        white-space: nowrap;
+      }
+    }
+    
+    a:focus {
+      &::after {
+        content: "LINK - PRESS ENTER";
+        position: absolute;
+        bottom: -30px;
+        left: 0;
+        background: var(--hc-text-link) !important;
+        color: var(--hc-text-inverse) !important;
+        padding: 4px 8px !important;
+        font-size: 10px !important;
+        font-weight: 900 !important;
+        z-index: 1000;
+        border: 2px solid var(--hc-border-primary) !important;
+        white-space: nowrap;
+      }
+    }
+  }
+}

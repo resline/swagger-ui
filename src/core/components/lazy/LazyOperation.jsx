@@ -2,16 +2,29 @@ import React, { lazy, Suspense } from "react"
 import PropTypes from "prop-types"
 import ImPropTypes from "react-immutable-proptypes"
 import { List } from "immutable"
+import { prefersReducedMotion, getMotionClasses } from "../../utils/motion-preferences"
 
 // Loading component for individual operations
-const OperationLoadingSpinner = () => (
-  <div className="opblock-loading-container">
-    <div className="operation-spinner">
-      <div className="spinner" />
+const OperationLoadingSpinner = () => {
+  const reducedMotion = prefersReducedMotion()
+  const containerClass = getMotionClasses("opblock-loading-container", "", "reduced-motion")
+  
+  return (
+    <div className={containerClass}>
+      <div className="operation-spinner">
+        <div className={getMotionClasses("spinner", "", "static-spinner")} />
+      </div>
+      <div className="loading-text">
+        {reducedMotion ? "Loading operation details..." : "Loading operation details..."}
+      </div>
+      {reducedMotion && (
+        <div className="loading-indicator" aria-live="polite">
+          <span>●</span>
+        </div>
+      )}
     </div>
-    <div className="loading-text">Loading operation details...</div>
-  </div>
-)
+  )
+}
 
 // Lazy load the Operation component
 const LazyOperationComponent = lazy(() =>
