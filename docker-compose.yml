@@ -81,7 +81,9 @@ services:
       - "${GRAFANA_PORT:-3000}:3000"
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_USER:-admin}
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin123}
+      # SECURITY CRITICAL: Change default password before deployment!
+      # Use: ./scripts/manage-secrets.sh generate-password 20
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-please-change-default-grafana-password}
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_SECURITY_DISABLE_GRAVATAR=true
       - GF_SECURITY_COOKIE_SECURE=true
@@ -132,7 +134,9 @@ services:
       - xpack.security.http.ssl.enabled=false
       - xpack.security.transport.ssl.enabled=false
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-changeme}
+      # SECURITY CRITICAL: Change Elasticsearch password before deployment!
+      # Use: ./scripts/manage-secrets.sh generate-elastic-passwords
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-please-change-default-elastic-password}
       - xpack.security.authc.realms.native.native1.order=0
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
@@ -143,7 +147,7 @@ services:
     labels:
       - "com.docker.compose.service=logging"
     healthcheck:
-      test: ["CMD-SHELL", "curl -u elastic:${ELASTIC_PASSWORD:-changeme} -f http://localhost:9200/_cluster/health || exit 1"]
+      test: ["CMD-SHELL", "curl -u elastic:${ELASTIC_PASSWORD:-please-change-default-elastic-password} -f http://localhost:9200/_cluster/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -161,11 +165,15 @@ services:
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
       - ELASTICSEARCH_USERNAME=kibana_system
-      - ELASTICSEARCH_PASSWORD=${KIBANA_SYSTEM_PASSWORD:-changeme}
+      # SECURITY CRITICAL: Change Kibana system password before deployment!
+      # Use: ./scripts/manage-secrets.sh generate-elastic-passwords
+      - ELASTICSEARCH_PASSWORD=${KIBANA_SYSTEM_PASSWORD:-please-change-default-kibana-password}
       - xpack.security.enabled=true
-      - xpack.security.encryptionKey=${KIBANA_ENCRYPTION_KEY:-changeme32charactersminimumrequired}
-      - xpack.encryptedSavedObjects.encryptionKey=${KIBANA_ENCRYPTION_KEY:-changeme32charactersminimumrequired}
-      - xpack.reporting.encryptionKey=${KIBANA_ENCRYPTION_KEY:-changeme32charactersminimumrequired}
+      # SECURITY CRITICAL: Change encryption keys before deployment!
+      # Must be exactly 32 hex characters - use: ./scripts/manage-secrets.sh generate-kibana-key
+      - xpack.security.encryptionKey=${KIBANA_ENCRYPTION_KEY:-please-change-32char-encryption-key}
+      - xpack.encryptedSavedObjects.encryptionKey=${KIBANA_ENCRYPTION_KEY:-please-change-32char-encryption-key}
+      - xpack.reporting.encryptionKey=${KIBANA_ENCRYPTION_KEY:-please-change-32char-encryption-key}
     networks:
       - swagger-network
     depends_on:

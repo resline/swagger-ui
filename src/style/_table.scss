@@ -103,7 +103,7 @@ table {
   font-weight: normal;
 
   // hack to give breathing room to the name column
-  // TODO: refactor all of this to flexbox
+  // Consider refactoring to flexbox for improved layout
   margin-right: 0.75em;
 
   @include type.text_headline();

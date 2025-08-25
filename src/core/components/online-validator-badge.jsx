@@ -24,7 +24,7 @@ export default class OnlineValidatorBadge extends React.Component {
     }
 
     getDefinitionUrl = () => {
-      // TODO: test this behavior by stubbing `window.location` in an Enzyme/JSDom env
+      // Consider adding tests by stubbing window.location in test environment
       let { specSelectors } = this.props
 
       const urlObject = new URL(specSelectors.url(), win.location)

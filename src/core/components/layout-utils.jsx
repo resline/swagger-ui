@@ -184,7 +184,7 @@ export class Select extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    // TODO: this puts us in a weird area btwn un/controlled selection... review
+    // Consider reviewing controlled vs uncontrolled component pattern
     if(nextProps.value !== this.props.value) {
       this.setState({ value: nextProps.value })
     }
