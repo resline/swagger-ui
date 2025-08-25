@@ -29,7 +29,7 @@ export default class RequestBodyEditor extends PureComponent {
 
     // this is the glue that makes sure our initial value gets set as the
     // current request body value
-    // TODO: achieve this in a selector instead
+    // Consider implementing this logic in a selector for better separation
     props.onChange(props.value)
   }
 

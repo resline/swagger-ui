@@ -19,13 +19,9 @@ export default class ExamplesSelect extends React.PureComponent {
 
   static defaultProps = {
     examples: Map({}),
-    onSelect: (...args) =>
-      // eslint-disable-next-line no-console
-      console.log(
-        // FIXME: remove before merging to master...
-        `DEBUG: ExamplesSelect was not given an onSelect callback`,
-        ...args
-      ),
+    onSelect: () => {
+      // No-op default callback
+    },
     currentExampleKey: null,
     showLabels: true,
   }
@@ -65,8 +61,8 @@ export default class ExamplesSelect extends React.PureComponent {
     // artificially kicking off an onSelect event in order to set a default
     // value in state. the consumer has the option to avoid this by checking
     // `isSyntheticEvent`, but we should really be doing this in a selector.
-    // TODO: clean this up
-    // FIXME: should this only trigger if `currentExamplesKey` is nullish?
+    // Set default example selection on component mount
+    // Note: Consider checking if currentExampleKey is already set
     const { onSelect, examples } = this.props
 
     if (typeof onSelect === "function") {

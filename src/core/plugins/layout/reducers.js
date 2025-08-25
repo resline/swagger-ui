@@ -15,7 +15,7 @@ export default {
   [SHOW]: (state, action) => {
     const isShown = action.payload.shown
     // This is one way to serialize an array, another (preferred) is to convert to json-pointer
-    // TODO: use json-pointer serilization instead of fromJS(...), for performance
+    // Consider using json-pointer serialization for better performance
     const thingToShow = fromJS(action.payload.thing)
     // This is a map of paths to bools
     // eg: [one, two] => true

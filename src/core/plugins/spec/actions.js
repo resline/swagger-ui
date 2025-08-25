@@ -66,7 +66,7 @@ export const parseToJson = (str) => ({specActions, specSelectors, errActions}) =
     errActions.clear({ source: "parser" })
     json = YAML.load(str, { schema: JSON_SCHEMA })
   } catch(e) {
-    // TODO: push error to state
+    // Consider pushing error to state for better error tracking
     console.error(e)
     return errActions.newSpecErr({
       source: "parser",

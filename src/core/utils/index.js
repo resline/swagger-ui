@@ -665,7 +665,7 @@ export const buildFormData = (data) => {
   return formArr.join("&")
 }
 
-// Is this really required as a helper? Perhaps. TODO: expose the system of presets.apis in docs, so we know what is supported
+// Helper function for shallow comparison - consider documenting preset API system
 export const shallowEqualKeys = (a,b, keys) => {
   return !!find(keys, (key) => {
     return eq(a[key], b[key])

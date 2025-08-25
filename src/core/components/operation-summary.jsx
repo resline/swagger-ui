@@ -96,7 +96,7 @@ export default class OperationSummary extends PureComponent {
               }}
             />
         }
-        <JumpToPath path={specPath} />{/* TODO: use wrapComponents here, swagger-ui doesn't care about jumpToPath */}
+        <JumpToPath path={specPath} />{/* Consider using wrapComponents pattern */}
         <button
           aria-label={`${method} ${path.replace(/\//g, "\u200b/")}`}
           className="opblock-control-arrow"

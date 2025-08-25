@@ -59,7 +59,7 @@ export default class ParameterRow extends Component {
     if ( value !== undefined && value !== paramValue ) {
       this.onChangeWrapper(numberToString(value))
     }
-    // todo: could check if schema here; if not, do not call. impact?
+    // Consider checking schema presence before calling setDefaultValue
     this.setDefaultValue()
   }
 

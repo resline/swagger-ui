@@ -22,12 +22,16 @@ const MotionPreferenceToggle = ({ className = "", showLabel = true, compact = fa
       }
     }
 
+    // Add storage event listener
     window.addEventListener("storage", handleStorageChange)
     
     // Listen for system preference changes
+    let mediaQuery = null
+    let handleMediaChange = null
+    
     if (window.matchMedia) {
-      const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
-      const handleMediaChange = () => {
+      mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
+      handleMediaChange = () => {
         if (motionStatus.manualOverride === null) {
           updateStatus()
         }
@@ -35,15 +39,15 @@ const MotionPreferenceToggle = ({ className = "", showLabel = true, compact = fa
 
       if (mediaQuery.addEventListener) {
         mediaQuery.addEventListener("change", handleMediaChange)
-        return () => {
-          window.removeEventListener("storage", handleStorageChange)
-          mediaQuery.removeEventListener("change", handleMediaChange)
-        }
       }
     }
 
+    // Single cleanup function that removes all added listeners
     return () => {
       window.removeEventListener("storage", handleStorageChange)
+      if (mediaQuery && handleMediaChange && mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener("change", handleMediaChange)
+      }
     }
   }, [motionStatus.manualOverride])
 
