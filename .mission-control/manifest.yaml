@@ -1,0 +1,79 @@
+version: 1
+name: swagger-ui
+tagline: Interaktywna dokumentacja API generowana automatycznie ze specyfikacji OpenAPI/Swagger.
+description: |-
+  Swagger UI to biblioteka narzędzi generująca interaktywną dokumentację API na podstawie specyfikacji OpenAPI (dawniej Swagger), umożliwiając wizualizację i bezpośrednie testowanie zasobów API bez konieczności implementowania logiki po stronie klienta. Repozytorium publikuje trzy pakiety npm: `swagger-ui` (moduł do integracji z bundlerami typu Webpack/Browserify), `swagger-ui-dist` (samodzielna wersja bez zależności, gotowa do serwowania statycznego) oraz `swagger-ui-react` (komponent React). Silnik renderujący zbudowany jest w React + Redux (z warstwą Immutable.js) i oparty o architekturę systemu wtyczek (plugin API), pozwalającą rozszerzać i podmieniać niemal każdy element interfejsu, w tym warstwę autoryzacji OAuth2, walidację schematów, podświetlanie składni czy generowanie przykładowych żądań "Try it out".
+
+  Oprócz rdzenia OSS repozytorium zawiera rozbudowaną warstwę produkcyjną: obraz Docker z konfiguratorem środowiskowym (CORS, OAuth), skrypty bezpieczeństwa (nagłówki HSTS/CSP, zarządzanie sekretami) oraz pełny stos monitoringu (Prometheus, Grafana, Elasticsearch/Kibana, Filebeat) opisany w dedykowanych przewodnikach wdrożeniowych. Projekt kładzie także duży nacisk na dostępność (WCAG 2.1 AA/AAA, tryb wysokiego kontrastu, obsługa `prefers-reduced-motion`) oraz internacjonalizację — w kodzie źródłowym (`src/core/i18n`) zaimplementowano tłumaczenia dla ośmiu języków (en, es, fr, de, pt, ja, zh-CN, ar wraz z obsługą RTL) przy użyciu i18next/react-i18next, choć README opisuje to nieco zachowawczo jako wsparcie tylko dla angielskiego i hiszpańskiego.
+
+  Całość jest budowana za pomocą Webpacka (osobne konfiguracje dla bundla core, standalone presetu i wersji ESM), testowana przy użyciu Jest (testy jednostkowe) i Cypress (testy e2e), z lintingiem ESLint/Stylelint i konwencjonalnymi commitami wymuszanymi przez commitlint/husky. Repozytorium jest aktywnie rozwijane (najnowsza wersja 5.27.1, wielu kontrybutorów, workflowy CI/CD na GitHub Actions do publikacji npm/Docker/Packagist) i ma status projektu w pełni produkcyjnego, wspieranego przez firmę SmartBear w ramach ekosystemu Swagger/OpenAPI.
+features:
+  - name: Renderowanie dokumentacji z OpenAPI/Swagger
+    description: Automatyczne generowanie interaktywnej dokumentacji API na podstawie specyfikacji OpenAPI 2.0/3.0/3.1 wraz z funkcją "Try it out" do wykonywania realnych żądań.
+    status: done
+  - name: Plugin API i customizacja layoutu
+    description: System wtyczek pozwalający podmieniać komponenty, reducery, selektory i layouty (np. custom-layout, xpane), wykorzystywany m.in. przez preset standalone.
+    status: done
+  - name: Trzy dystrybucje pakietu
+    description: Publikacja npm jako swagger-ui (bundler), swagger-ui-dist (samodzielna wersja) oraz swagger-ui-react (komponent React) z osobnymi workflowami release.
+    status: done
+  - name: Autoryzacja OAuth2/JWT
+    description: Wbudowany komponent authorize-btn oraz konfigurator OAuth w obrazie Docker do obsługi przepływów autoryzacji API.
+    status: done
+  - name: Internacjonalizacja (i18n) i RTL
+    description: Tłumaczenia UI w src/core/i18n dla 8 języków (en, es, fr, de, pt, ja, zh-CN, ar) z react-i18next oraz obsługą układu RTL dla arabskiego; README opisuje to jako wsparcie tylko en/es, co sugeruje niespójność dokumentacji względem kodu.
+    status: done
+  - name: Dostępność (a11y) i preferencje ruchu
+    description: Tryb wysokiego kontrastu (WCAG AAA), przełącznik motywu jasny/ciemny, wsparcie dla prefers-reduced-motion oraz udoskonalona nawigacja klawiaturą i focus management.
+    status: done
+  - name: Wdrożenie produkcyjne w Docker + monitoring
+    description: Docker Compose (dev/prod/secrets) z nginx, skryptami bezpieczeństwa, health checkami oraz pełnym stosem Prometheus/Grafana/Elasticsearch/Kibana/Filebeat do metryk i logów.
+    status: done
+  - name: Optymalizacja wydajności bundla
+    description: Konfiguracja webpacka z code-splittingiem, lazy loading komponentów (LazyOperation, LazyModels), analizą rozmiaru bundla (webpack-bundle-analyzer) oraz web-vitals/performance-monitor w kodzie.
+    status: done
+  - name: Rozszerzenie na kolejne języki i pełne RTL
+    description: Dalsze uzupełnianie i utrzymanie tłumaczeń oraz pełne dostosowanie stylów pod RTL dla kolejnych języków, zgodnie z planem opisanym w przewodnikach implementacyjnych.
+    status: wip
+stack:
+  languages:
+    - JavaScript (ES2015+)
+    - JSX
+    - SCSS/Sass
+    - Shell
+  frameworks:
+    - React
+    - Redux
+    - Redux Immutable
+    - Immutable.js
+    - i18next / react-i18next
+    - Webpack
+    - Jest
+    - Cypress
+    - Enzyme
+    - Reselect
+  infra:
+    - Docker / Docker Compose
+    - Nginx
+    - Prometheus
+    - Grafana
+    - Elasticsearch / Kibana / Filebeat
+    - GitHub Actions
+    - npm / Packagist
+links: {}
+status: active
+tags:
+  - openapi
+  - swagger
+  - api-documentation
+  - react
+  - redux
+  - i18n
+  - accessibility
+  - docker
+  - monitoring
+  - developer-tools
+ai:
+  generated_at: 2026-07-21T01:18:27.458Z
+  source_commit: 6f432d3f90e224e37c688aad05da272fb27cf60d
+locked: []
