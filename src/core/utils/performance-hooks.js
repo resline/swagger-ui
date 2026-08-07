@@ -3,7 +3,7 @@
  * Custom hooks for measuring component performance
  */
 
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, useCallback } from 'react'
 import { getWebVitalsTracker } from './web-vitals.js'
 
 // Hook to measure component render time
@@ -11,19 +11,23 @@ export const useRenderTime = (componentName) => {
   const startTimeRef = useRef(null)
   const webVitals = getWebVitalsTracker()
 
+  // Fixed: Added proper dependency array to prevent infinite rerenders
   useEffect(() => {
     if (startTimeRef.current) {
       const renderTime = performance.now() - startTimeRef.current
-      webVitals.trackRenderTime(componentName, startTimeRef.current)
+      webVitals.trackRenderTime(componentName, renderTime)
     }
-  })
+  }, [componentName, webVitals])
 
   const startMeasurement = useCallback(() => {
     startTimeRef.current = performance.now()
   }, [])
 
-  // Call this at the beginning of render
-  startMeasurement()
+  // Fixed: Moved side effect from render phase to useLayoutEffect
+  // This ensures measurement starts before DOM mutations
+  useLayoutEffect(() => {
+    startMeasurement()
+  }, [startMeasurement])
 
   return { startMeasurement }
 }
@@ -47,21 +51,22 @@ export const useComponentPerformance = (componentName) => {
   const updateCountRef = useRef(0)
   const webVitals = getWebVitalsTracker()
 
+  // Fixed: Added proper dependency array to prevent infinite rerenders
+  // Removed metrics from deps to prevent infinite loop since we're updating metrics inside
   // Track render time
   useEffect(() => {
     if (renderStartRef.current) {
       const renderTime = performance.now() - renderStartRef.current
-      const newMetrics = {
-        ...metrics,
+      setMetrics(prev => ({
+        ...prev,
         lastRenderTime: renderTime,
         totalRenders: updateCountRef.current,
-        averageRenderTime: (metrics.averageRenderTime || 0) * 0.9 + renderTime * 0.1
-      }
-      setMetrics(newMetrics)
+        averageRenderTime: (prev.averageRenderTime || 0) * 0.9 + renderTime * 0.1
+      }))
       
-      webVitals.trackRenderTime(componentName, renderStartRef.current)
+      webVitals.trackRenderTime(componentName, renderTime)
     }
-  })
+  }, [componentName, webVitals])
 
   // Track mount time
   useEffect(() => {
@@ -75,8 +80,11 @@ export const useComponentPerformance = (componentName) => {
     updateCountRef.current += 1
   }, [])
 
-  // Call at start of render
-  startRender()
+  // Fixed: Moved side effect from render phase to useLayoutEffect
+  // This ensures measurement starts before DOM mutations
+  useLayoutEffect(() => {
+    startRender()
+  }, [startRender])
 
   return metrics
 }
@@ -132,9 +140,10 @@ export const useListPerformance = (listName, itemCount) => {
   const webVitals = getWebVitalsTracker()
   const renderStartRef = useRef(null)
 
-  useEffect(() => {
+  // Fixed: Added empty dependency array to run only once per component lifecycle
+  useLayoutEffect(() => {
     renderStartRef.current = performance.now()
-  })
+  }, [])
 
   useEffect(() => {
     if (renderStartRef.current) {

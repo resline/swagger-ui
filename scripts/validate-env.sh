@@ -125,7 +125,7 @@ validate_password_strength() {
     fi
     
     # Check for placeholder values
-    if [[ "$password" =~ ^CHANGE_ME.*REQUIRED$ ]] || [[ "$password" =~ ^CHANGE_ME.*IF_USED$ ]]; then
+    if [[ "$password" =~ ^CHANGE_ME.*REQUIRED$ ]] || [[ "$password" =~ ^CHANGE_ME.*IF_USED$ ]] || [[ "$password" =~ ^your-.* ]] || [[ "$password" =~ ^please-change-.* ]]; then
         echo -e "${RED}❌ SECURITY ERROR: $var_name uses placeholder value - must be changed!${NC}"
         return 1
     fi
@@ -190,9 +190,38 @@ check_security_config() {
     # Check for default/weak passwords
     validate_password_strength "GRAFANA_PASSWORD" || security_errors=$((security_errors + 1))
     
+    # Check Elasticsearch password if set
+    if [ -n "${ELASTIC_PASSWORD:-}" ] && [ "${ELASTIC_PASSWORD}" != "your-secure-elasticsearch-password-here" ] && [ "${ELASTIC_PASSWORD}" != "please-change-default-elastic-password" ]; then
+        validate_password_strength "ELASTIC_PASSWORD" || security_errors=$((security_errors + 1))
+    elif [ "${ELASTIC_PASSWORD:-}" = "please-change-default-elastic-password" ] || [ "${ELASTIC_PASSWORD:-}" = "changeme" ]; then
+        echo -e "${RED}❌ SECURITY ERROR: ELASTIC_PASSWORD uses default/placeholder value - must be changed!${NC}"
+        security_errors=$((security_errors + 1))
+    fi
+    
+    # Check Kibana system password if set
+    if [ -n "${KIBANA_SYSTEM_PASSWORD:-}" ] && [ "${KIBANA_SYSTEM_PASSWORD}" != "your-secure-kibana-system-password-here" ] && [ "${KIBANA_SYSTEM_PASSWORD}" != "please-change-default-kibana-password" ]; then
+        validate_password_strength "KIBANA_SYSTEM_PASSWORD" || security_errors=$((security_errors + 1))
+    elif [ "${KIBANA_SYSTEM_PASSWORD:-}" = "please-change-default-kibana-password" ] || [ "${KIBANA_SYSTEM_PASSWORD:-}" = "changeme" ]; then
+        echo -e "${RED}❌ SECURITY ERROR: KIBANA_SYSTEM_PASSWORD uses default/placeholder value - must be changed!${NC}"
+        security_errors=$((security_errors + 1))
+    fi
+    
+    # Check Kibana encryption key if set
+    if [ -n "${KIBANA_ENCRYPTION_KEY:-}" ]; then
+        if [[ "${KIBANA_ENCRYPTION_KEY}" =~ ^your-.* ]] || [[ "${KIBANA_ENCRYPTION_KEY}" =~ ^please-change-.* ]] || [[ "${KIBANA_ENCRYPTION_KEY}" =~ changeme ]]; then
+            echo -e "${RED}❌ SECURITY ERROR: KIBANA_ENCRYPTION_KEY uses default/placeholder value - must be changed!${NC}"
+            security_errors=$((security_errors + 1))
+        elif [ ${#KIBANA_ENCRYPTION_KEY} -ne 32 ]; then
+            echo -e "${RED}❌ SECURITY ERROR: KIBANA_ENCRYPTION_KEY must be exactly 32 characters${NC}"
+            security_errors=$((security_errors + 1))
+        else
+            echo -e "${GREEN}✅ KIBANA_ENCRYPTION_KEY: Proper length (32 characters)${NC}"
+        fi
+    fi
+    
     # Check API key if set
     if [ -n "${API_KEY:-}" ]; then
-        if [[ "${API_KEY}" =~ ^CHANGE_ME.*REQUIRED$ ]]; then
+        if [[ "${API_KEY}" =~ ^CHANGE_ME.*REQUIRED$ ]] || [[ "${API_KEY}" =~ ^your-.* ]]; then
             echo -e "${RED}❌ SECURITY ERROR: API_KEY uses placeholder value - must be changed!${NC}"
             security_errors=$((security_errors + 1))
         elif [ ${#API_KEY} -lt 32 ]; then
@@ -204,7 +233,7 @@ check_security_config() {
     fi
     
     # Check database password if set
-    if [ -n "${DB_PASSWORD:-}" ] && [ "${DB_PASSWORD}" != "CHANGE_ME_SECURE_DB_PASSWORD_IF_USED" ]; then
+    if [ -n "${DB_PASSWORD:-}" ] && [ "${DB_PASSWORD}" != "CHANGE_ME_SECURE_DB_PASSWORD_IF_USED" ] && [ "${DB_PASSWORD}" != "your-secure-database-password-here" ]; then
         validate_password_strength "DB_PASSWORD" || security_errors=$((security_errors + 1))
     fi
     

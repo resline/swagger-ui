@@ -30,7 +30,7 @@ export default function transformErrors (errors) {
     .filter(err => !!err) // filter removed errors
     .map(err => {
       if(!err.get("line") && err.get("path")) {
-        // TODO: re-resolve line number if we've transformed it away
+        // Consider re-resolving line numbers after transformation
       }
       return err
     })

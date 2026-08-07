@@ -33,7 +33,7 @@ processors:
 output.elasticsearch:
   hosts: ["elasticsearch:9200"]
   username: "elastic"
-  password: "${ELASTIC_PASSWORD:changeme}"
+  password: "${ELASTIC_PASSWORD:please-change-default-elastic-password}"
   index: "swagger-ui-%{+yyyy.MM.dd}"
   template.settings:
     index.number_of_shards: 1
@@ -54,4 +54,4 @@ monitoring.enabled: true
 monitoring.elasticsearch:
   hosts: ["elasticsearch:9200"]
   username: "elastic"
-  password: "${ELASTIC_PASSWORD:changeme}"
+  password: "${ELASTIC_PASSWORD:please-change-default-elastic-password}"

@@ -109,6 +109,21 @@ compose-security-check: ## Security check for docker-compose files
 		echo "docker-compose-security not installed, skipping"; \
 	fi
 
+validate-env: ## Validate environment configuration and security
+	@echo "Validating environment configuration..."
+	@./scripts/validate-env.sh
+
+credentials-check: ## Check for default/insecure credentials
+	@echo "Checking for insecure default credentials..."
+	@echo "🔍 Scanning for dangerous default values..."
+	@if grep -r "changeme\|admin123\|CHANGE_ME" docker-compose*.yml monitoring/ .env.example 2>/dev/null; then \
+		echo "❌ Found potential default credentials - review above results!"; \
+		echo "💡 Use './scripts/manage-secrets.sh generate-all' to create secure passwords"; \
+		exit 1; \
+	else \
+		echo "✅ No obvious default credentials found in configuration files"; \
+	fi
+
 deploy-staging: build security-scan test ## Deploy to staging environment
 	@echo "Deploying to staging..."
 	@docker-compose -f docker-compose.yml up -d
@@ -125,7 +140,10 @@ clean: ## Clean up Docker artifacts
 
 monitor: ## Show monitoring dashboard URLs
 	@echo "Monitoring Dashboard URLs:"
-	@echo "  Grafana:     http://localhost:3000 (admin/admin123)"
+	@echo "  Grafana:     http://localhost:3000 (admin/YOUR_GRAFANA_PASSWORD)"
+	@echo ""
+	@echo "⚠️  SECURITY: Replace default credentials before deployment!"
+	@echo "💡 Use './scripts/manage-secrets.sh generate-all' to create secure passwords"
 	@echo "  Prometheus:  http://localhost:9090"
 	@echo "  Kibana:      http://localhost:5601"
 	@echo "  Swagger UI:  http://localhost:8080"

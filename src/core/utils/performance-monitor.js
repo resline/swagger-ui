@@ -228,7 +228,7 @@ class PerformanceMonitor {
     // Send to analytics service or log to console
     if (process.env.NODE_ENV === 'development') {
       console.group(`🔍 Performance Metric: ${name}`)
-      console.log('Data:', data)
+      // Performance data available via getMetrics() API
       console.groupEnd()
     }
     
